@@ -1,0 +1,8 @@
+{
+  "name": "CRM-20",
+  "description": "Application pour gérer les crédits des clients, les soldes, les historiques de paiement et générer des rapports mensuels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

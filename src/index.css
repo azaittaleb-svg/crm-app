@@ -1,0 +1,612 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Public Sans", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 700;
+
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.5rem;
+  --radius-pill: 2rem;
+
+  /* Requested Color Palette (Sneat Theme Specs) */
+  --color-primary: #696cff;
+  --color-primary-light: #e7e7ff;
+  --color-success: #71dd37;
+  --color-warning: #ffab00;
+  --color-danger: #ff3e1d;
+  --color-info: #03c3ec;
+  --color-heading: #233446;
+  --color-body: #566a7f;
+  --color-muted: #a1acb8;
+  --color-background: #f5f5f9;
+  --color-card: #ffffff;
+  --color-border: #eceef1;
+
+  /* Custom requested panel variables in camelCase and kebab-case */
+  --color-panelHeading: #233446;
+  --color-panelBody: #566a7f;
+  --color-panelMuted: #a1acb8;
+  --color-brandPrimary: #696cff;
+  --color-brandSuccess: #71dd37;
+
+  --color-panel-heading: #233446;
+  --color-panel-body: #566a7f;
+  --color-panel-muted: #a1acb8;
+  --color-brand-primary: #696cff;
+  --color-brand-success: #71dd37;
+
+  /* Helper aliases */
+  --color-dark-text: #233446;
+  --color-secondary-text: #566a7f;
+  --color-light-text: #a1acb8;
+
+  /* Shadows & Radius */
+  --radius-card: 16px;
+  --radius-input: 8px;
+  --radius-button: 8px;
+  --shadow-card: 0 2px 6px rgba(67, 89, 113, 0.12);
+  --shadow-xs: 0 2px 4px 0 rgba(67, 89, 113, 0.08);
+  --shadow-2xs: 0 1px 4px 0 rgba(67, 89, 113, 0.04);
+  --shadow-3xs: 0 1px 2px 0 rgba(67, 89, 113, 0.02);
+}
+
+@layer components {
+  .sneat-checkbox {
+    @apply appearance-none w-[20px] h-[20px] bg-white dark:bg-[#323249] border-[1.5px] border-[#d9dee3] dark:border-[#434460] rounded-[4.5px] cursor-pointer relative align-middle outline-hidden focus:ring-0 focus:ring-offset-0 transition-colors shadow-2xs;
+  }
+  .sneat-checkbox:checked {
+    @apply bg-[#696cff] border-[#696cff];
+  }
+  .sneat-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 11px;
+    border-style: solid;
+    border-color: white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .sneat-checkbox:indeterminate {
+    @apply bg-[#696cff] border-[#696cff];
+  }
+  .sneat-checkbox:indeterminate::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    width: 9px;
+    height: 2px;
+    background-color: white;
+  }
+}
+
+@layer base {
+  :root {
+    --background: #F5F5F9;
+    --foreground: #566a7f;
+    --card: #ffffff;
+    --card-foreground: #566a7f;
+    --border: #ECEEF1;
+    --primary: #696cff;
+    --primary-foreground: #ffffff;
+  }
+
+  body, button, input, select, textarea, div, span, p, a {
+    font-family: 'Public Sans', sans-serif;
+  }
+
+  body {
+    @apply antialiased bg-[#f5f5f9] text-[#566a7f] text-[14px];
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Public Sans', sans-serif !important;
+    font-weight: 600 !important;
+    @apply tracking-normal text-[#233446];
+  }
+
+  /* Explicit utility override to preserve JetBrains Mono for monospaced values and figures */
+  .font-mono, .font-mono * {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace !important;
+  }
+
+  input[type="text"], 
+  input[type="number"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="date"],
+  select,
+  textarea {
+    @apply w-full px-3.5 py-2.5 bg-[#ffffff] dark:bg-[#232333] border border-[#dbdade]/70 dark:border-[#434460]/40 rounded-lg focus:ring-4 focus:ring-[#696cff]/10 focus:border-[#696cff] transition-all outline-hidden text-[#435971] dark:text-[#dbdade] placeholder:text-[#a1acb8] dark:placeholder:text-[#707194] shadow-none text-[14px];
+  }
+
+  /* Hide spin buttons for number inputs globally */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+}
+
+@layer components {
+  /* Datta Able Button Utility Classes - Refocused for Sneat */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-sans font-semibold text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer select-none active:scale-[0.98];
+  }
+  
+  .btn-rounded {
+    @apply rounded-full;
+  }
+  
+  /* Primary Sneat Purple */
+  .btn-primary {
+    @apply bg-[#696cff] border border-[#696cff] text-white hover:bg-[#5f61e6] hover:border-[#5f61e6] shadow-sm shadow-[#696cff]/10;
+  }
+  .btn-secondary {
+    @apply bg-[#8592a3] border border-[#8592a3] text-white hover:bg-[#788393] hover:border-[#788393];
+  }
+  .btn-success {
+    @apply bg-[#71dd37] border border-[#71dd37] text-white hover:bg-[#66c732] hover:border-[#66c732];
+  }
+  .btn-danger {
+    @apply bg-[#ff3e1d] border border-[#ff3e1d] text-white hover:bg-[#e6381a] hover:border-[#e6381a];
+  }
+  .btn-warning {
+    @apply bg-[#ffab00] border border-[#ffab00] text-white hover:bg-[#e69a00] hover:border-[#e69a00];
+  }
+  .btn-info {
+    @apply bg-[#03c3ec] border border-[#03c3ec] text-white hover:bg-[#03b0d4] hover:border-[#03b0d4];
+  }
+
+  /* Outline Variants */
+  .btn-outline-primary {
+    @apply bg-transparent border border-[#696cff] text-[#696cff] hover:bg-[#696cff]/5;
+  }
+  .btn-outline-secondary {
+    @apply bg-transparent border border-[#8592a3] text-[#8592a3] hover:bg-[#8592a3]/5;
+  }
+  .btn-outline-success {
+    @apply bg-transparent border border-[#71dd37] text-[#71dd37] hover:bg-[#71dd37]/5;
+  }
+  .btn-outline-danger {
+    @apply bg-transparent border border-[#ff3e1d] text-[#ff3e1d] hover:bg-[#ff3e1d]/5;
+  }
+  .btn-outline-warning {
+    @apply bg-transparent border border-[#ffab00] text-[#ffab00] hover:bg-[#ffab00]/5;
+  }
+  .btn-outline-info {
+    @apply bg-transparent border border-[#03c3ec] text-[#03c3ec] hover:bg-[#03c3ec]/5;
+  }
+
+  /* Glow/Shadow modifiers */
+  .btn-shadow-primary {
+    @apply shadow-[0_4px_12px_rgba(105,108,255,0.25)];
+  }
+
+  .lux-primary-btn {
+    @apply relative overflow-hidden inline-flex items-center justify-center gap-2 bg-[#696cff] border border-[#696cff] text-white px-5 py-2.5 rounded-lg font-sans font-bold uppercase tracking-wider text-[11px] hover:bg-[#5f61e6] hover:border-[#5f61e6] transition-all duration-300 shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer;
+  }
+
+  .lux-secondary-btn {
+    @apply border border-[#dbdade]/70 dark:border-[#434460]/40 bg-white dark:bg-[#2b2c40] text-[#697a8d] dark:text-[#a3a4cc] px-5 py-2.5 rounded-lg font-sans font-bold uppercase tracking-wider text-[11px] hover:bg-slate-50 dark:hover:bg-[#323249] transition-all duration-300 shadow-3xs active:scale-[0.98] cursor-pointer inline-flex items-center justify-center gap-2;
+  }
+
+  /* Exquisite cards with subtle layout and borders */
+  .lux-card {
+    @apply bg-white dark:bg-[#2b2c40] border border-[#dbdade]/70 dark:border-[#434460]/40 rounded-lg p-5 transition-all duration-300 shadow-xs hover:shadow-sm;
+  }
+
+  /* Exquisite database table styling */
+  .lux-table {
+    @apply w-full border-collapse;
+  }
+  
+  .lux-table th {
+    @apply py-3.5 px-5 text-[11px] font-black uppercase tracking-widest text-[#a1acb8] dark:text-[#707194] text-left border-b border-[#dbdade]/40 dark:border-[#434460]/20 select-none;
+  }
+
+  .lux-table-row {
+    @apply hover:bg-[#f5f5f9]/40 dark:hover:bg-[#232333]/30 transition-colors border-b border-[#dbdade]/40 dark:border-[#434460]/20;
+  }
+
+  .lux-table-cell {
+    @apply py-4 px-5 text-[14px] font-medium text-[#435971] dark:text-[#dbdade];
+  }
+
+  /* Perfect badge indicators */
+  .badge-emerald {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-[#e8fadf] text-[#71dd37] dark:bg-[#2e4b35] dark:text-[#71dd37] rounded select-none;
+  }
+
+  .badge-rose {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-[#ffe1e1] text-[#ff3e1d] dark:bg-[#4b2e2e] dark:text-[#ff3e1d] rounded select-none;
+  }
+
+  .badge-amber {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-[#fff2e0] text-[#ffab00] dark:bg-[#4b3e2e] dark:text-[#ffab00] rounded select-none;
+  }
+
+  .badge-sky {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider bg-[#e7e7ff] text-[#696cff] dark:bg-[#393a59] dark:text-[#b1b4ff] rounded select-none;
+  }
+
+  /* Standardized Pastel States for the Cockpit */
+  .badge-amber-soft {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-[#ffab00]/10 text-[#ffab00] rounded select-none font-mono;
+  }
+
+  .badge-rose-soft {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-[#ff3e1d]/10 text-[#ff3e1d] rounded select-none font-mono;
+  }
+
+  .badge-emerald-soft {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-[#71dd37]/10 text-[#71dd37] rounded select-none font-mono;
+  }
+
+  .badge-indigo-soft {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-[#696cff]/10 text-[#696cff] rounded select-none font-mono;
+  }
+
+  .badge-blue-soft {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest bg-[#03c3ec]/10 text-[#03c3ec] rounded select-none font-mono;
+  }
+
+  /* Custom bento-style stats */
+  .bento-num {
+    @apply text-2xl font-bold text-[#435971] dark:text-[#dbdade] tracking-tight leading-none font-mono;
+  }
+}
+
+/* Styling for all scrollbars globally to make them whisper-thin and elegant! */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.12);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.12);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+@media print {
+  html, body, #root {
+    background: white !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+}
+
+/* ==========================================================================
+   MATERIO PREMIUM DARK MODE THEMING (Matte Dashboard Style)
+   ========================================================================== */
+.dark {
+  --background: #232333;
+  --foreground: #dbdade;
+  --card: #2b2c40;
+  --card-foreground: #dbdade;
+  --border: rgba(67, 68, 96, 0.4);
+  --primary: #b1b4ff;
+  --primary-foreground: #232333;
+}
+
+/* Global body, HTML & general text overrides */
+.dark, 
+.dark html, 
+.dark body,
+.dark #root {
+  background-color: #232333 !important;
+  color: #a3a4cc !important;
+}
+
+/* Page, main container layout scroll and gray wraps */
+.dark #main-scroll-container,
+.dark .bg-\[\#F8F7FA\],
+.dark .bg-\[\#F5F5F9\],
+.dark .bg-slate-55,
+.dark .bg-\[\#f8fafc\] {
+  background-color: #232333 !important;
+}
+
+/* Sticky layout header glass effect in dark mode */
+.dark .bg-\[\#F8F7FA\]\/90,
+.dark .backdrop-blur-md,
+.dark .bg-white\/80 {
+  background-color: rgba(35, 35, 51, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* Pure whites, cards, bento columns, sidebars, dashboard panels and popovers */
+.dark .bg-white,
+.dark aside,
+.dark .bg-\[\#ffffff\],
+.dark .bg-card,
+.dark .card,
+.dark .popover,
+.dark .bg-slate-50,
+.dark .bg-slate-50\/50,
+.dark .bg-slate-100,
+.dark .bg-slate-100\/70 {
+  background-color: #2b2c40 !important;
+}
+
+/* Layout headers, dashboard item cards */
+.dark .bg-white.border.border-border,
+.dark .bg-white.border {
+  background-color: #2b2c40 !important;
+  border-color: rgba(67, 68, 96, 0.4) !important;
+}
+
+/* Active Sidebar Navigation Items & Selected Highlights */
+.dark .bg-\[\#e7e7ff\],
+.dark [data-active=true] {
+  background-color: #393a59 !important;
+  color: #b1b4ff !important;
+}
+
+/* Hover effects within table rows, sidebars & dropdowns */
+.dark .hover\:bg-slate-50:hover, 
+.dark .hover\:bg-slate-50\/80:hover,
+.dark .lux-table-row:hover,
+.dark tr:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-slate-50:hover {
+  background-color: #323249 !important;
+}
+
+/* Secondary background elements inside dashboards (KPI boxes, widgets, badges) */
+.dark .bg-slate-100\/70,
+.dark .bg-transparent\/70,
+.dark .bg-transparent\/40,
+.dark .bg-transparent\/10,
+.dark .bg-info\/10,
+.dark .bg-success\/10,
+.dark .bg-warning\/10,
+.dark .bg-slate-50\/80 {
+  background-color: #30314a !important;
+}
+
+/* Universal borders, dividers, separators and table lines mapped to Materio subtle border */
+.dark .border-border, 
+.dark .border-slate-150,
+.dark .border-slate-200, 
+.dark .border-slate-300, 
+.dark .border-\[\#dbdade\]\/60,
+.dark .border-slate-205,
+.dark .border-slate-200\/60,
+.dark .border-slate-100,
+.dark .border-slate-100\/50,
+.dark .border-slate-300\/60,
+.dark .border-transparent,
+.dark .border-transparent\/30,
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark hr {
+  border-color: rgba(67, 68, 96, 0.4) !important;
+}
+
+/* Primary/High-contrast Typography */
+.dark .text-dark-text, .dark .text-\[\#435971\], .dark .text-\[\#566a7f\], .dark .text-\[\#232743\], .dark .text-slate-900, .dark .text-black {
+  color: #dbdade !important;
+}
+
+/* Body / Secondary Typography */
+.dark .text-body, .dark .text-secondary-text, .dark .text-slate-705, .dark .text-slate-700, .dark .text-slate-600, .dark .text-\[\#697a8d\], .dark .text-\[\#566A7F\] {
+  color: #a3a4cc !important;
+}
+
+/* Small Muted Text, Captions & Placeholders */
+.dark .text-light-text, .dark .text-slate-400, .dark .text-\[\#a1acb8\], .dark .text-slate-300 {
+  color: #707194 !important;
+}
+
+/* Precise Active Text color highlights to match Materio Soft Purple */
+.dark .text-\[\#696CFF\],
+.dark .text-\[\#696cff\],
+.dark .text-primary-active,
+.dark .group-hover\/item\:text-\[\#435971\]:hover {
+  color: #b1b4ff !important;
+}
+
+/* Table elements, headings and row wraps */
+.dark table thead th, .dark table thead {
+  background-color: #2b2c40 !important;
+  color: #707194 !important;
+}
+
+/* Global input form elements */
+.dark input[type="text"], 
+.dark input[type="number"], 
+.dark input[type="email"], 
+.dark input[type="password"], 
+.dark input[type="date"],
+.dark select,
+.dark textarea {
+  background-color: #232333 !important;
+  border-color: rgba(67, 68, 96, 0.4) !important;
+  color: #dbdade !important;
+  box-shadow: none !important;
+}
+
+.dark input::placeholder, 
+.dark textarea::placeholder {
+  color: #707194 !important;
+}
+
+/* State badge colors (pastel adaptations for dark matte surface) */
+.dark .bg-emerald-55 {
+  background-color: rgba(113, 221, 55, 0.12) !important;
+  color: #71DD37 !important;
+  border-color: rgba(113, 221, 55, 0.20) !important;
+}
+
+.dark .bg-rose-55 {
+  background-color: rgba(255, 62, 29, 0.12) !important;
+  color: #FF3E1D !important;
+  border-color: rgba(255, 62, 29, 0.20) !important;
+}
+
+.dark .bg-orange-55,
+.dark .bg-\[\#4b3e2e\],
+.dark .bg-\[\#fff2e0\] {
+  background-color: rgba(255, 171, 0, 0.16) !important;
+  color: #FFAB00 !important;
+  border-color: rgba(255, 171, 0, 0.20) !important;
+}
+
+/* Explicitly target deep orange / problematic dark mode backgrounds mentioned by user */
+.dark .bg-orange-400,
+.dark .bg-orange-500,
+.dark .bg-orange-600,
+.dark .bg-orange-700,
+.dark .bg-orange-800 {
+  background-color: #3e2600 !important;
+  color: #ffab00 !important;
+  border: 1px solid rgba(255, 171, 0, 0.2) !important;
+}
+
+/* Modal and dialogue backdrop overlays */
+.dark .bg-black\/50, 
+.dark .bg-black\/40 {
+  background-color: rgba(12, 12, 16, 0.7) !important;
+}
+
+/* Dynamic Recharts tooltips */
+.dark .recharts-tooltip-wrapper .bg-white {
+  background-color: #2b2c40 !important;
+  border-color: rgba(67, 68, 96, 0.4) !important;
+  color: #dbdade !important;
+}
+
+/* Elegant thin purple scrollbars */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(177, 180, 255, 0.2) !important;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(177, 180, 255, 0.4) !important;
+}
+
+/* ==========================================================================
+   A4 INVOICE PRINT SPECIFIC STYLES
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: #ffffff;
+  }
+  
+  /* Reset tailwind/theme overrides during print */
+  html, body, #root {
+    background: white !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Override shadow in print */
+  .page-a4 {
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+}
+
+.cell-nowrap {
+  white-space: nowrap !important;
+}
+
+.cell-number {
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* ==========================================================================
+   TABLEAUX PREMIUM DEVIS (Injection stricte depuis `<style>`)
+   ========================================================================== */
+.premium-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  border: 1px solid #7f8c8d;
+}
+.premium-table thead tr {
+  background-color: transparent !important;
+}
+.premium-table th {
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: 1px solid #7f8c8d;
+}
+.premium-table td {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #000000;
+  border: 1px solid #7f8c8d;
+  vertical-align: middle;
+}
+
+@media print {
+   /* Ensure strong header colors maintain themselves in print if tailwind tries to strip it */
+   .premium-table th {
+     -webkit-print-color-adjust: exact;
+     print-color-adjust: exact;
+   }
+}
+
+

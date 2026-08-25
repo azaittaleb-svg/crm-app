@@ -1,0 +1,328 @@
+{
+  "entities": {
+    "Client": {
+      "title": "Client",
+      "description": "Information about a client.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "linkedPartnerId": { "type": "string", "description": "ID of the linked supplier partner" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "A purchase made by a client.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "quantity": { "type": "number" },
+        "total": { "type": "number" },
+        "paymentStatus": { "type": "string", "enum": ["paid", "credit"] },
+        "amountPaid": { "type": "number" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientId", "description", "price", "quantity", "total", "date", "paymentStatus", "amountPaid"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "A payment made by a client.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      },
+      "required": ["clientId", "amount", "date"]
+    },
+    "ExpenseTemplate": {
+      "title": "Expense Template",
+      "description": "Definition of a recurring expense.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["FIXED", "VARIABLE", "CONSUMPTION"] },
+        "amount": { "type": "number", "description": "Base/Limit amount" },
+        "category": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "type", "amount", "isActive"]
+    },
+    "MonthlyExpense": {
+      "title": "Monthly Expense",
+      "description": "An actual expense instance for a specific month.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "templateId": { "type": "string" },
+        "name": { "type": "string" },
+        "monthYear": { "type": "string", "description": "YYYY-MM format" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "PAID"] },
+        "type": { "type": "string", "enum": ["FIXED", "VARIABLE", "CONSUMPTION"] },
+        "validatedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "templateId", "name", "monthYear", "amount", "status", "type"]
+    },
+    "StaffAdvance": {
+      "title": "Staff Advance",
+      "description": "An advance on salary for a staff member.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "chargeTemplateId": { "type": "string", "description": "Foreign key to expense_templates.id" },
+        "montant": { "type": "number", "description": "Advance amount" },
+        "date": { "type": "string", "format": "date" },
+        "moisConcerné": { "type": "string", "description": "Format: YYYY-MM" },
+        "note": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "chargeTemplateId", "montant", "date", "moisConcerné"]
+    },
+    "ZakatPayout": {
+      "title": "Zakat Payout",
+      "description": "A payment from the defined Zakat budget amount.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "templateId": { "type": "string", "description": "Foreign key to expense_templates.id" },
+        "montant": { "type": "number", "description": "Amount paid out" },
+        "date": { "type": "string", "format": "date" },
+        "note": { "type": "string" },
+        "hide": { "type": "boolean", "description": "Whether this payout details is hidden from main view for privacy" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "templateId", "montant", "date", "note", "hide"]
+    },
+    "TemplateCharge": {
+      "title": "Template Charge",
+      "description": "Expense template used for recurring charges like salaries.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "name": { "type": "string", "description": "Previously 'titre'" },
+        "amount": { "type": "number", "description": "Previously 'montant'" },
+        "category": { "type": "string", "description": "Previously 'categorie'" },
+        "type": { "type": "string", "enum": ["FIXED", "VARIABLE"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "amount", "category", "type"]
+    },
+    "Settings": {
+      "title": "App Settings",
+      "description": "Application level settings like sync dates.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "lastSyncDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Information about a supplier.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "linkedPartnerId": { "type": "string", "description": "ID of the linked client partner" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name"]
+    },
+    "SupplierPurchase": {
+      "title": "Supplier Purchase",
+      "description": "A purchase made from a supplier.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "description": { "type": "string" },
+        "items": { 
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "description": { "type": "string" },
+              "price": { "type": "number" },
+              "quantity": { "type": "number" }
+            }
+          }
+        },
+        "total": { "type": "number" },
+        "amountPaid": { "type": "number" },
+        "status": { "type": "string", "enum": ["paid", "credit"] },
+        "date": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "supplierId", "total", "date", "status"]
+    },
+    "SupplierPayment": {
+      "title": "Supplier Payment",
+      "description": "A payment made to a supplier.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      },
+      "required": ["ownerId", "supplierId", "amount", "date"]
+    },
+    "MiscellaneousOperation": {
+      "title": "Miscellaneous Operation",
+      "description": "Information about a miscellaneous accounting operation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "label": { "type": "string" },
+        "date": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string", "enum": ["impot", "taxe", "cloture", "autre"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "label", "date", "amount", "type"]
+    },
+    "TvaDeclaration": {
+      "title": "TVA Declaration",
+      "description": "Information about a declared TVA period.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "month": { "type": "number" },
+        "year": { "type": "number" },
+        "tvaCollectee": { "type": "number" },
+        "tvaRecuperable": { "type": "number" },
+        "netResult": { "type": "number" },
+        "typeResultat": { "type": "string" },
+        "declaredAt": { "type": "string" },
+        "declarationCode": { "type": "string" },
+        "transactionCount": { "type": "number" }
+      },
+      "required": ["ownerId", "month", "year", "tvaCollectee", "tvaRecuperable", "netResult", "typeResultat", "declaredAt", "declarationCode", "transactionCount"]
+    },
+    "WooOrderNote": {
+      "title": "WooCommerce Order Note",
+      "description": "Internal note attached to a WooCommerce order.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "note": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["orderId", "note"]
+    },
+    "WooReminderSent": {
+      "title": "Woo Reminder Sent",
+      "description": "Stores tracking information for WooCommerce order reminders and emails sent.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "sentAt": { "type": "string" },
+        "channel": { "type": "string" },
+        "avanceAmount": { "type": "string" },
+        "templateType": { "type": "string" },
+        "history": { "type": "array" }
+      },
+      "required": ["orderId", "sentAt"]
+    }
+  },
+  "firestore": {
+    "/woo_reminders_sent/{reminderId}": {
+      "schema": "WooReminderSent",
+      "description": "Stores tracking information for WooCommerce order reminders and emails sent."
+    },
+    "/woo_order_notes/{noteId}": {
+      "schema": "WooOrderNote",
+      "description": "Stores internal order notes synchronized across devices."
+    },
+    "/miscellaneous_operations/{opId}": {
+      "schema": "MiscellaneousOperation",
+      "description": "Stores manual accounting/miscellaneous operations."
+    },
+    "/tva_declarations/{decId}": {
+      "schema": "TvaDeclaration",
+      "description": "Stores completed VAT periods and locks."
+    },
+    "/suppliers/{supplierId}": {
+      "schema": "Supplier",
+      "description": "Stores supplier profile information."
+    },
+    "/suppliers/{supplierId}/purchases/{purchaseId}": {
+      "schema": "SupplierPurchase",
+      "description": "Stores purchases made from the supplier."
+    },
+    "/suppliers/{supplierId}/payments/{paymentId}": {
+      "schema": "SupplierPayment",
+      "description": "Stores payments made to the supplier."
+    },
+    "/clients/{clientId}": {
+      "schema": "Client",
+      "description": "Stores client profile information."
+    },
+    "/clients/{clientId}/purchases/{purchaseId}": {
+      "schema": "Purchase",
+      "description": "Stores purchases made by the client."
+    },
+    "/clients/{clientId}/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Stores payments made by the client."
+    },
+    "/expense_templates/{templateId}": {
+      "schema": "ExpenseTemplate",
+      "description": "Stores recurring expense definitions."
+    },
+    "/expenses/{expenseId}": {
+      "schema": "MonthlyExpense",
+      "description": "Stores individual monthly expense records."
+    },
+    "/settings/{settingId}": {
+      "schema": "Settings",
+      "description": "Stores application settings."
+    },
+    "/expense_templates/{templateId}": {
+      "schema": "TemplateCharge",
+      "description": "Stores expense templates including salaries."
+    },
+    "/staff_advances/{advanceId}": {
+      "schema": "StaffAdvance",
+      "description": "Stores individual salary advances."
+    },
+    "/zakat_payouts/{payoutId}": {
+      "schema": "ZakatPayout",
+      "description": "Stores individual Zakat payouts."
+    }
+  }
+}

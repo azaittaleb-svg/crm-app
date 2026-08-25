@@ -1,0 +1,248 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Default: Deny unauthenticated
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() { 
+      return isSignedIn() && (
+        (request.auth.token != null && request.auth.token.admin == true) ||
+        request.auth.uid == 'azfQWWQIeENHcLb7KU82TKRGoOK2' || 
+        (request.auth.token != null && 'email' in request.auth.token && request.auth.token.email.lower() == 'az.aittaleb@gmail.com')
+      );
+    }
+
+    function isOwner(data) {
+      return isSignedIn() && (
+        isAdmin() ||
+        (data != null && (
+          ('ownerId' in data && data.ownerId == request.auth.uid) ||
+          ('calculatedBy' in data && data.calculatedBy == request.auth.uid)
+        ))
+      );
+    }
+
+    function canCreate(data) {
+      return isSignedIn() && (
+        isAdmin() ||
+        (data != null && (
+          ('ownerId' in data && data.ownerId == request.auth.uid) ||
+          ('calculatedBy' in data && data.calculatedBy == request.auth.uid)
+        ))
+      );
+    }
+
+    // --- Collections ---
+
+    match /clients/{clientId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+
+      match /purchases/{purchaseId} {
+        allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+        allow create: if canCreate(request.resource.data);
+        allow update, delete: if isOwner(resource.data);
+
+        match /audit_logs/{logId} {
+          allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+          allow create: if canCreate(request.resource.data);
+          allow update, delete: if isOwner(resource.data);
+        }
+      }
+
+      match /payments/{paymentId} {
+        allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+        allow create: if canCreate(request.resource.data);
+        allow update, delete: if isOwner(resource.data);
+      }
+
+      match /credit_notes/{noteId} {
+        allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+        allow create: if canCreate(request.resource.data);
+        allow update, delete: if isOwner(resource.data);
+      }
+    }
+
+    match /suppliers/{supplierId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+
+      match /purchases/{purchaseId} {
+        allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+        allow create: if canCreate(request.resource.data);
+        allow update, delete: if isOwner(resource.data);
+      }
+
+      match /payments/{paymentId} {
+        allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+        allow create: if canCreate(request.resource.data);
+        allow update, delete: if isOwner(resource.data);
+      }
+    }
+
+    match /expense_templates/{templateId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /expenses/{expenseId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /settings/{settingId=**} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isAdmin() || (isSignedIn() && isOwner(resource.data));
+    }
+
+    match /userSettings/{userId} {
+      allow read, write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /templates_charges/{templateId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /staff_advances/{advanceId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /zakat_payouts/{payoutId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /returns_notes/{noteId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /miscellaneous_operations/{opId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /tva_declarations/{decId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /sequences/{seqId=**} {
+      allow get, list, create, update, delete: if isSignedIn();
+    }
+
+    match /bank_reconciliations/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /vat_audit_trail/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /woo_order_notes/{noteId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    match /woo_reminders_sent/{reminderId} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+
+    // --- Secure Collection Groups ---
+    match /{path=**}/purchases/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/payments/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/expenses/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/expense_templates/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/templates_charges/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/staff_advances/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/zakat_payouts/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/returns_notes/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/miscellaneous_operations/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/tva_declarations/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/bank_reconciliations/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/credit_notes/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/vat_audit_trail/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+    match /{path=**}/audit_logs/{id} {
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow create: if canCreate(request.resource.data);
+      allow update, delete: if isOwner(resource.data);
+    }
+  }
+}
