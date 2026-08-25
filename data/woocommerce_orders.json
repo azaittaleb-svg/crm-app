@@ -56,14 +56,29 @@
       "number": "115142",
       "meta_data": [
         {
+          "id": 12047,
+          "key": "_is_vitepos",
+          "value": "Y"
+        },
+        {
           "id": 12042,
           "key": "_order_number",
           "value": "115142"
         },
         {
-          "id": 12043,
-          "key": "_vtp_fee_total",
-          "value": "-251"
+          "id": 12055,
+          "key": "_vtp_cash_drawer_id",
+          "value": "2"
+        },
+        {
+          "id": 12050,
+          "key": "_vtp_change_amount",
+          "value": "0"
+        },
+        {
+          "id": 12053,
+          "key": "_vtp_counter_id",
+          "value": "1"
         },
         {
           "id": 12044,
@@ -71,34 +86,19 @@
           "value": "-0"
         },
         {
+          "id": 12043,
+          "key": "_vtp_fee_total",
+          "value": "-251"
+        },
+        {
           "id": 12045,
           "key": "_vtp_order_note",
           "value": ""
         },
         {
-          "id": 12046,
-          "key": "_vtp_payment_note",
-          "value": ""
-        },
-        {
-          "id": 12047,
-          "key": "_is_vitepos",
-          "value": "Y"
-        },
-        {
-          "id": 12048,
-          "key": "_vtp_payment_method",
-          "value": "C"
-        },
-        {
-          "id": 12049,
-          "key": "_vtp_tendered_amount",
-          "value": "700"
-        },
-        {
-          "id": 12050,
-          "key": "_vtp_change_amount",
-          "value": "0"
+          "id": 12052,
+          "key": "_vtp_outlet_id",
+          "value": "1"
         },
         {
           "id": 12051,
@@ -123,14 +123,14 @@
           ]
         },
         {
-          "id": 12052,
-          "key": "_vtp_outlet_id",
-          "value": "1"
+          "id": 12048,
+          "key": "_vtp_payment_method",
+          "value": "C"
         },
         {
-          "id": 12053,
-          "key": "_vtp_counter_id",
-          "value": "1"
+          "id": 12046,
+          "key": "_vtp_payment_note",
+          "value": ""
         },
         {
           "id": 12054,
@@ -138,9 +138,9 @@
           "value": "1"
         },
         {
-          "id": 12055,
-          "key": "_vtp_cash_drawer_id",
-          "value": "2"
+          "id": 12049,
+          "key": "_vtp_tendered_amount",
+          "value": "700"
         }
       ],
       "line_items": [
@@ -319,24 +319,9 @@
       "number": "115141",
       "meta_data": [
         {
-          "id": 12018,
-          "key": "is_vat_exempt",
-          "value": "no"
-        },
-        {
-          "id": 12021,
-          "key": "_order_number",
-          "value": "115141"
-        },
-        {
-          "id": 12022,
-          "key": "_hs_cod_deposit_amount",
-          "value": "50"
-        },
-        {
-          "id": 12023,
-          "key": "_hs_cod_remaining_amount",
-          "value": "44"
+          "id": 12026,
+          "key": "_cfw",
+          "value": "true"
         },
         {
           "id": 12024,
@@ -344,19 +329,29 @@
           "value": "rule_XwKUiHHG"
         },
         {
+          "id": 12022,
+          "key": "_hs_cod_deposit_amount",
+          "value": "50"
+        },
+        {
           "id": 12025,
           "key": "_hs_cod_deposit_paid",
           "value": "yes"
         },
         {
-          "id": 12026,
-          "key": "_cfw",
-          "value": "true"
+          "id": 12023,
+          "key": "_hs_cod_remaining_amount",
+          "value": "44"
         },
         {
-          "id": 12027,
-          "key": "_wc_order_attribution_source_type",
-          "value": "typein"
+          "id": 12021,
+          "key": "_order_number",
+          "value": "115141"
+        },
+        {
+          "id": 12035,
+          "key": "_wc_order_attribution_device_type",
+          "value": "Desktop"
         },
         {
           "id": 12028,
@@ -364,9 +359,9 @@
           "value": "https://www.workstation.ma/cart/"
         },
         {
-          "id": 12029,
-          "key": "_wc_order_attribution_utm_source",
-          "value": "(direct)"
+          "id": 12033,
+          "key": "_wc_order_attribution_session_count",
+          "value": "1"
         },
         {
           "id": 12030,
@@ -374,19 +369,19 @@
           "value": "https://www.workstation.ma/checkout/#cfw-order-review"
         },
         {
-          "id": 12031,
-          "key": "_wc_order_attribution_session_start_time",
-          "value": "2026-08-24 11:53:09"
-        },
-        {
           "id": 12032,
           "key": "_wc_order_attribution_session_pages",
           "value": "7"
         },
         {
-          "id": 12033,
-          "key": "_wc_order_attribution_session_count",
-          "value": "1"
+          "id": 12031,
+          "key": "_wc_order_attribution_session_start_time",
+          "value": "2026-08-24 11:53:09"
+        },
+        {
+          "id": 12027,
+          "key": "_wc_order_attribution_source_type",
+          "value": "typein"
         },
         {
           "id": 12034,
@@ -394,9 +389,14 @@
           "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
         },
         {
-          "id": 12035,
-          "key": "_wc_order_attribution_device_type",
-          "value": "Desktop"
+          "id": 12029,
+          "key": "_wc_order_attribution_utm_source",
+          "value": "(direct)"
+        },
+        {
+          "id": 12018,
+          "key": "is_vat_exempt",
+          "value": "no"
         }
       ],
       "line_items": [
@@ -571,9 +571,9 @@
       "number": "115140",
       "meta_data": [
         {
-          "id": 12009,
-          "key": "is_vat_exempt",
-          "value": "no"
+          "id": 12013,
+          "key": "_cfw",
+          "value": "true"
         },
         {
           "id": 12012,
@@ -581,9 +581,9 @@
           "value": "115140"
         },
         {
-          "id": 12013,
-          "key": "_cfw",
-          "value": "true"
+          "id": 12009,
+          "key": "is_vat_exempt",
+          "value": "no"
         }
       ],
       "line_items": [
@@ -106769,7 +106769,7 @@
       }
     }
   ],
-  "lastFetchTime": 1787653517453,
+  "lastFetchTime": 1787659131816,
   "productPrices": {
     "1849": 2200,
     "1850": 2200,

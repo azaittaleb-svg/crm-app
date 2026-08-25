@@ -4,34 +4,34 @@
     "summary": {
       "poids": "0.594 Kg",
       "produit": "COLIS",
-      "crbt": "Sans",
-      "depart": "RABAT",
-      "arrivee": "CASABLANCA"
+      "crbt": "Destination Statut D",
+      "depart": "RABAT  D",
+      "arrivee": "-"
     },
     "results": [
       {
         "date": "07/08/2026",
-        "details": "Envoi sorti à destination de CENTRE NATIONAL AMANA",
         "heure": "01:01:49",
-        "localisation": "RABAT EL MENZEH"
+        "localisation": "RABAT EL MENZEH",
+        "details": "Envoi sorti à destination de CENTRE NATIONAL AMANA"
       },
       {
         "date": "07/08/2026",
-        "details": "Envoi pris en charge par  RABAT EL MENZEH",
         "heure": "01:01:35",
-        "localisation": "RABAT EL MENZEH"
+        "localisation": "RABAT EL MENZEH",
+        "details": "Envoi pris en charge par  RABAT EL MENZEH"
       },
       {
         "date": "07/08/2026",
-        "details": "Envoi arrivé à  RABAT EL MENZEH",
         "heure": "12:06:04",
-        "localisation": "RABAT EL MENZEH"
+        "localisation": "RABAT EL MENZEH",
+        "details": "Envoi arrivé à  RABAT EL MENZEH"
       }
     ],
     "currentStep": 2,
     "isFinished": false,
-    "lastUpdated": "2026-08-15T09:12:08.159Z",
-    "updatedAtMs": 1786785128159
+    "lastUpdated": "2026-08-25T11:56:00.427Z",
+    "updatedAtMs": 1787658960427
   },
   "QB230909807MA": {
     "code": "QB230909807MA",

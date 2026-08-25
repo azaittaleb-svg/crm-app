@@ -4267,16 +4267,32 @@ export default function WooCommerceOrdersPage() {
                     </div>
                   )}
 
-                  {/* Empty state if trackingData is empty array */}
-                  {!trackingLoading && trackingData && trackingData.length === 0 && (
-                    <div className="p-8 text-center space-y-2 bg-white dark:bg-[#2b2c40] rounded-xl border border-slate-200/60 dark:border-[#434460]/40 shadow-xs">
-                      <Package size={32} className="text-[#a1acb8] mx-auto" />
-                      <p className="text-xs font-semibold text-[#566a7f] dark:text-[#dbdade]">
-                        Aucun événement trouvé pour le code de suivi <span className="font-mono font-bold text-[#696cff]">{customTrackingInput}</span>.
-                      </p>
-                      <p className="text-[11px] text-[#a1acb8]">
-                        Vérifiez que le code de suivi est correct et saisi sans espaces.
-                      </p>
+                  {/* Empty / Uninitialized state if trackingData is null or empty array */}
+                  {!trackingLoading && !trackingError && (!trackingData || trackingData.length === 0) && (
+                    <div className="p-8 text-center space-y-3 bg-white dark:bg-[#2b2c40] rounded-xl border border-slate-200/60 dark:border-[#434460]/40 shadow-xs">
+                      <div className="w-12 h-12 rounded-full bg-[#696cff]/10 text-[#696cff] flex items-center justify-center mx-auto">
+                        <Truck size={24} />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-bold text-[#222222] dark:text-white">
+                          Suivi de Colis Barid Al-Maghrib / Amana
+                        </h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+                          {customTrackingInput
+                            ? `Recherche en cours pour le code ${customTrackingInput}...`
+                            : "Entrez un numéro d'envoi Amana ou Barid (ex: QB230944826MA) ci-dessus pour suivre l'acheminement en direct."}
+                        </p>
+                      </div>
+                      {customTrackingInput && (
+                        <button
+                          type="button"
+                          onClick={() => fetchTrackingData(customTrackingInput, true)}
+                          className="px-4 py-2 rounded-lg text-xs font-bold bg-[#696cff] hover:bg-[#5f61e6] text-white shadow-sm transition-all cursor-pointer inline-flex items-center gap-2"
+                        >
+                          <RefreshCw size={14} />
+                          <span>Lancer la recherche</span>
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
