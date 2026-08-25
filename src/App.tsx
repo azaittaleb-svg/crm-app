@@ -152,6 +152,8 @@ function Main() {
         <Route path="/zakat/:templateId" element={<ZakatDetailsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/woocommerce" element={<WooCommerceOrdersPage />} />
+        <Route path="/woocommerce-orders" element={<WooCommerceOrdersPage />} />
+        <Route path="*" element={<HomePage />} />
       </Route>
       <Route
         path="/download/:type/:clientId/:purchaseId"

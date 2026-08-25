@@ -105,7 +105,10 @@ import {
   setStoredManualVirementConfirmations,
   getManualVirementConfirmationInfo,
   ManualVirementInfo,
+  hasOrderAvance,
 } from '../utils/wooProfit';
+
+export { hasOrderAvance, type NotificationTemplateType };
 
 function getDaysSinceOrder(dateCreatedStr?: string): { days: number; formattedText: string } {
   if (!dateCreatedStr) return { days: 0, formattedText: '0j' };
@@ -114,20 +117,6 @@ function getDaysSinceOrder(dateCreatedStr?: string): { days: number; formattedTe
   const diffMs = Math.max(0, now.getTime() - created.getTime());
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   return { days, formattedText: `${days}j` };
-}
-
-export function hasOrderAvance(order: any): { isAvance: boolean; amount: number } {
-  if (!order) return { isAvance: false, amount: 0 };
-  const orderTotalInfo = getOrderFullTotal(order);
-  const profitInfo = calculateOrderProfit(order);
-
-  if (orderTotalInfo.isDeposit && orderTotalInfo.depositAmount > 0) {
-    return { isAvance: true, amount: orderTotalInfo.depositAmount };
-  }
-  if (profitInfo.isCodDeposit && profitInfo.depositPaidOnline > 0) {
-    return { isAvance: true, amount: profitInfo.depositPaidOnline };
-  }
-  return { isAvance: false, amount: 0 };
 }
 
 function getTemplateLabel(type: NotificationTemplateType): string {

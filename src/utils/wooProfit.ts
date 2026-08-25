@@ -713,6 +713,20 @@ export function getOrderFullTotal(order: any): {
   };
 }
 
+export function hasOrderAvance(order: any): { isAvance: boolean; amount: number } {
+  if (!order) return { isAvance: false, amount: 0 };
+  const orderTotalInfo = getOrderFullTotal(order);
+  const profitInfo = calculateOrderProfit(order);
+
+  if (orderTotalInfo.isDeposit && orderTotalInfo.depositAmount > 0) {
+    return { isAvance: true, amount: orderTotalInfo.depositAmount };
+  }
+  if (profitInfo.isCodDeposit && profitInfo.depositPaidOnline > 0) {
+    return { isAvance: true, amount: profitInfo.depositPaidOnline };
+  }
+  return { isAvance: false, amount: 0 };
+}
+
 export function isOrderToday(order: any): boolean {
   const dateStr = order.date_created || order.date_completed || order.date_paid;
   if (!dateStr) return false;

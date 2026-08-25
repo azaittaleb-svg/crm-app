@@ -18,7 +18,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { analyzeTrackingEvents } from '../../utils/tracking';
-import { NotificationTemplateType } from '../../pages/WooCommerceOrdersPage';
+import { NotificationTemplateType } from '../../utils/wooProfit';
 
 interface WooTrackingTabProps {
   trackingLoading: boolean;

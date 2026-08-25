@@ -20,8 +20,6 @@ import { fr } from 'date-fns/locale';
 import {
   NotificationTemplateType,
   hasOrderAvance,
-} from '../../pages/WooCommerceOrdersPage';
-import {
   getOrderFullTotal,
   getReminderSentInfo,
   deleteReminderSent,
@@ -100,6 +98,7 @@ export const WooNotificationsTab: React.FC<WooNotificationsTabProps> = ({
   const totalOrder =
     fullTotalInfo.fullTotal > 0 ? fullTotalInfo.fullTotal : parseFloat(activeModalOrder.total || '0');
   const reminderInfo = getReminderSentInfo(activeModalOrder.id);
+  const emailHistory = reminderInfo?.history || [];
 
   return (
     <div className="flex-1 min-h-0 p-6 overflow-y-auto space-y-4">
