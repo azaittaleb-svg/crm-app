@@ -683,12 +683,17 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div
               className={`flex flex-col text-left transition-opacity duration-300 select-none ${isExpanded ? 'opacity-100' : 'opacity-0'}`}
             >
-              <span
-                className="font-sans font-extrabold text-[21px] tracking-tight text-[#435971] dark:text-[#dbdade] leading-none mb-0.5"
-                style={{ letterSpacing: '-0.5px' }}
-              >
-                Finexy
-              </span>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span
+                  className="font-sans font-extrabold text-[21px] tracking-tight text-[#435971] dark:text-[#dbdade] leading-none"
+                  style={{ letterSpacing: '-0.5px' }}
+                >
+                  Finexy
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#696cff]/10 text-[#696cff] dark:bg-[#696cff]/20 dark:text-indigo-300 border border-[#696cff]/20">
+                  {APP_VERSION}
+                </span>
+              </div>
               <span
                 className="text-[10px] font-bold uppercase tracking-widest text-[#a1acb8] dark:text-[#707194] leading-none shrink-0"
                 style={{ letterSpacing: '1.2px' }}
@@ -1436,6 +1441,9 @@ export default function Layout({ children }: { children: ReactNode }) {
                     </div>
                   )}
 
+                  <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#696cff]/10 text-[#696cff] dark:bg-[#696cff]/20 dark:text-indigo-300 border border-[#696cff]/20 select-none">
+                    {APP_VERSION}
+                  </span>
                   <NotificationBell />
                 </div>
               </div>
@@ -1683,12 +1691,17 @@ export default function Layout({ children }: { children: ReactNode }) {
                         </svg>
                       </div>
                       <div className="flex flex-col text-left">
-                        <span
-                          className="font-sans font-extrabold text-[21px] tracking-tight text-[#435971] dark:text-[#dbdade] leading-none mb-0.5"
-                          style={{ letterSpacing: '-0.5px' }}
-                        >
-                          Finexy
-                        </span>
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <span
+                            className="font-sans font-extrabold text-[21px] tracking-tight text-[#435971] dark:text-[#dbdade] leading-none"
+                            style={{ letterSpacing: '-0.5px' }}
+                          >
+                            Finexy
+                          </span>
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#696cff]/10 text-[#696cff] dark:bg-[#696cff]/20 dark:text-indigo-300 border border-[#696cff]/20">
+                            {APP_VERSION}
+                          </span>
+                        </div>
                         <span
                           className="text-[10px] font-bold uppercase tracking-widest text-[#a1acb8] dark:text-[#707194] leading-none text-left"
                           style={{ letterSpacing: '1.2px' }}

@@ -1,4 +1,4 @@
-export const APP_VERSION = '3.0 Premium';
+export const APP_VERSION = 'v3.1';
 
 export const COMPANY_INFO = {
   name: 'Advanced it',
