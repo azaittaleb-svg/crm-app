@@ -14,6 +14,8 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CustomerService } from '../../services/customer.service';
+import { calculatePurchaseBalance } from '../../utils/balanceUtils';
 
 interface OperationsActionDeckProps {
   recentPurchases: any[];
@@ -37,37 +39,80 @@ export const OperationsActionDeck: React.FC<OperationsActionDeckProps> = ({
     count: 0,
     totalAvoirs: 0,
     totalUtilises: 0,
-    totalDisponibles: 0
+    totalDisponibles: 0,
   },
 }) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'debtors' | 'sales' | 'creditNotes'>('debtors');
 
-  // Find top debtor clients
+  // Find top debtor clients with exact enterprise calculations
   const debtorClients = React.useMemo(() => {
-    const clientDebts: Record<string, { name: string; debt: number; purchasesCount: number }> = {};
+    const clientPurchasesMap: Record<string, any[]> = {};
+    const clientCreditNotesMap: Record<string, any[]> = {};
 
-    validPurchases.forEach((p) => {
-      const clientId = p.clientId || 'unknown';
-      const clientName = clientsMap[clientId] || p.clientName || 'Client Inconnu';
-      const total = Number(p.total) || 0;
-      const paid = Number(p.paid) || 0;
-      const debt = Math.max(0, total - paid);
+    (validPurchases || []).forEach((p) => {
+      const clientId =
+        p.clientId ||
+        p.parentId ||
+        p.ref?.parent?.parent?.id ||
+        'unknown';
+      if (!clientPurchasesMap[clientId]) {
+        clientPurchasesMap[clientId] = [];
+      }
+      clientPurchasesMap[clientId].push(p);
+    });
 
-      if (debt > 0) {
-        if (!clientDebts[clientId]) {
-          clientDebts[clientId] = { name: clientName, debt: 0, purchasesCount: 0 };
-        }
-        clientDebts[clientId].debt += debt;
-        clientDebts[clientId].purchasesCount += 1;
+    (creditNotes || []).forEach((cn) => {
+      const clientId =
+        cn.clientId ||
+        cn.parentId ||
+        cn.ref?.parent?.parent?.id ||
+        'unknown';
+      if (!clientCreditNotesMap[clientId]) {
+        clientCreditNotesMap[clientId] = [];
+      }
+      clientCreditNotesMap[clientId].push(cn);
+    });
+
+    const debtorList: { id: string; name: string; debt: number; purchasesCount: number }[] = [];
+
+    Object.entries(clientPurchasesMap).forEach(([clientId, purchasesList]) => {
+      if (clientId === 'unknown') return;
+
+      const clientName = clientsMap[clientId] || purchasesList[0]?.clientName || 'Client Inconnu';
+      const cNotes = clientCreditNotesMap[clientId] || [];
+
+      // Filter out devis and cancelled invoices
+      const activePurchases = purchasesList.filter(
+        (p) =>
+          p.type !== 'devis' &&
+          p.status !== 'Annulée' &&
+          p.status !== 'annulée' &&
+          p.status !== 'Brouillon'
+      );
+
+      const stats = CustomerService.calculateCustomerStats(activePurchases, cNotes);
+
+      // Count only pending / unpaid transactions (factures en suspens)
+      const pendingPurchasesCount = activePurchases.filter((p) => {
+        const { debt } = calculatePurchaseBalance(p);
+        return debt > 0.05;
+      }).length;
+
+      if (stats.detteClient > 0.05) {
+        debtorList.push({
+          id: clientId,
+          name: clientName,
+          debt: stats.detteClient,
+          purchasesCount: pendingPurchasesCount,
+        });
       }
     });
 
-    return Object.entries(clientDebts)
-      .map(([id, data]) => ({ id, ...data }))
+    return debtorList
       .sort((a, b) => b.debt - a.debt)
       .slice(0, 5);
-  }, [validPurchases, clientsMap]);
+  }, [validPurchases, creditNotes, clientsMap]);
 
   return (
     <div className="bg-white dark:bg-[#2b2c40] border border-[#dbdade]/70 dark:border-[#434460]/40 rounded-lg shadow-3xs overflow-hidden text-left w-full">
@@ -190,8 +235,9 @@ export const OperationsActionDeck: React.FC<OperationsActionDeckProps> = ({
               <tbody className="divide-y divide-slate-100 dark:divide-[#434460]/20 text-xs">
                 {recentPurchases.slice(0, 5).map((p, idx) => {
                   const clientName = clientsMap[p.clientId] || p.clientName || 'Comptoir';
-                  const isPaid = (p.paid || 0) >= (p.total || 0);
-                  const isPartial = (p.paid || 0) > 0 && !isPaid;
+                  const { total, paid, debt } = calculatePurchaseBalance(p);
+                  const isPaid = debt <= 0.05;
+                  const isPartial = paid > 0.05 && debt > 0.05;
 
                   return (
                     <tr key={p.id + "_" + idx} className="hover:bg-slate-50/80 dark:hover:bg-[#323249]/40 transition-colors">
@@ -204,10 +250,10 @@ export const OperationsActionDeck: React.FC<OperationsActionDeckProps> = ({
                         {clientName}
                       </td>
                       <td className="px-5 py-3.5 text-right font-mono font-bold text-[#435971] dark:text-[#dbdade]">
-                        {Number(p.total || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DH
+                        {total.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DH
                       </td>
                       <td className="px-5 py-3.5 text-right font-mono text-emerald-600 dark:text-emerald-400">
-                        {Number(p.paid || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DH
+                        {paid.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} DH
                       </td>
                       <td className="px-5 py-3.5 text-center font-bold">
                         {isPaid ? (

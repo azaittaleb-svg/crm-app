@@ -5,6 +5,7 @@ import { ExecutiveHeroKpis } from '../components/dashboard/ExecutiveHeroKpis';
 import { WooCommercePulseCard } from '../components/dashboard/WooCommercePulseCard';
 import { FinancialFlowMatrix } from '../components/dashboard/FinancialFlowMatrix';
 import { OperationsActionDeck } from '../components/dashboard/OperationsActionDeck';
+import { calculatePurchaseBalance } from '../utils/balanceUtils';
 import { motion } from 'motion/react';
 import { Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -103,7 +104,10 @@ export default function HomePage() {
     }
 
     localSales = filteredPurchases.reduce((acc: number, curr: any) => acc + (Number(curr.total) || 0), 0);
-    localPaid = filteredPurchases.reduce((acc: number, curr: any) => acc + (Number(curr.paid) || 0), 0);
+    localPaid = filteredPurchases.reduce((acc: number, curr: any) => {
+      const { paid } = calculatePurchaseBalance(curr);
+      return acc + paid;
+    }, 0);
 
     const totalSalesConsolidated = localSales + wooSales;
     const computedRecovery = localSales > 0 ? Math.min(100, (localPaid / localSales) * 100) : 100;

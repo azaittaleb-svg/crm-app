@@ -193,21 +193,25 @@ export function useDashboardData() {
     const unsubscribePurchases = onSnapshot(
       query(collectionGroup(db, 'purchases'), where('ownerId', '==', user.uid)),
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => {
-          const parts = doc.ref.path.split('/');
+        const data = snapshot.docs.map((docSnap) => {
+          const parentDoc = docSnap.ref.parent?.parent;
+          const parentCollection = parentDoc?.parent?.id; // "clients" or "suppliers"
+          const parentId = parentDoc?.id;
           return {
-            id: doc.id,
-            ...doc.data(),
-            parentId: parts[1] || doc.ref.parent.parent?.id,
-            parentPath: parts[0] || doc.ref.parent.parent?.parent.id,
+            id: docSnap.id,
+            ...docSnap.data(),
+            parentId,
+            parentPath: parentCollection,
           } as any;
         });
 
         const clientPurchases = data
-          .filter((p) => !p.parentPath || p.parentPath === 'clients')
-          .map((p) => ({ ...p, clientId: p.parentId }));
+          .filter((p) => p.parentPath === 'clients' || (!p.parentPath && (p.clientId || p.parentId)))
+          .map((p) => ({ ...p, clientId: p.clientId || p.parentId }));
 
-        const supplierPurchasesData = data.filter((p) => p.parentPath === 'suppliers');
+        const supplierPurchasesData = data
+          .filter((p) => p.parentPath === 'suppliers')
+          .map((p) => ({ ...p, supplierId: p.supplierId || p.parentId }));
 
         const sortedClients = clientPurchases.sort(
           (a, b) =>
@@ -231,7 +235,14 @@ export function useDashboardData() {
     const unsubscribeCreditNotes = onSnapshot(
       query(collectionGroup(db, 'credit_notes'), where('ownerId', '==', user.uid)),
       (snapshot) => {
-        const notes = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as any);
+        const notes = snapshot.docs.map((docSnap) => {
+          const parentDoc = docSnap.ref.parent?.parent;
+          return {
+            id: docSnap.id,
+            ...docSnap.data(),
+            clientId: (docSnap.data() as any).clientId || parentDoc?.id,
+          } as any;
+        });
         setCreditNotes(notes);
       },
       (error) => {
