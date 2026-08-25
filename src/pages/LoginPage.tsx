@@ -35,7 +35,7 @@ export default function LoginPage() {
   };
 
   // Variants for staggered children animations
-  const cardVariants = {
+  const cardVariants: any = {
     hidden: { opacity: 0, y: 30, scale: 0.97 },
     visible: {
       opacity: 1,
@@ -50,7 +50,7 @@ export default function LoginPage() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,

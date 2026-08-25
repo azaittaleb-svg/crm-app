@@ -257,9 +257,44 @@
         "history": { "type": "array" }
       },
       "required": ["orderId", "sentAt"]
+    },
+    "WooTrackingMap": {
+      "title": "Woo Tracking Map",
+      "description": "Stores order tracking numbers for Amana / Barid synchronized across devices and sessions.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "code": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "updatedAtMs": { "type": "number" }
+      },
+      "required": ["orderId", "code"]
+    },
+    "WooTrackingResult": {
+      "title": "Woo Tracking Result",
+      "description": "Stores cached tracking steps, events and status for Barid Al-Maghrib tracking numbers.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "summary": { "type": "object" },
+        "results": { "type": "array" },
+        "currentStep": { "type": "number" },
+        "isFinished": { "type": "boolean" },
+        "lastUpdated": { "type": "string" },
+        "updatedAtMs": { "type": "number" }
+      },
+      "required": ["code", "results"]
     }
   },
   "firestore": {
+    "/woo_tracking_map/{orderId}": {
+      "schema": "WooTrackingMap",
+      "description": "Stores order tracking codes synchronized in real-time."
+    },
+    "/woo_tracking_results/{code}": {
+      "schema": "WooTrackingResult",
+      "description": "Stores cached Barid / Amana tracking results."
+    },
     "/woo_reminders_sent/{reminderId}": {
       "schema": "WooReminderSent",
       "description": "Stores tracking information for WooCommerce order reminders and emails sent."

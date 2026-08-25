@@ -73,6 +73,13 @@ import { fr } from 'date-fns/locale';
 import { convertNumberToFrenchWords } from '../utils/numberToWords';
 import { analyzeTrackingEvents } from '../utils/tracking';
 import {
+  subscribeToTrackingMap,
+  saveOrderTracking,
+  saveTrackingResultToDb,
+  getTrackingResultFromDb,
+  syncExistingTrackingToFirestore,
+} from '../services/wooTracking.service';
+import {
   NotificationTemplateType,
   calculateOrderProfit,
   getLineItemPurchasePrice,
@@ -420,16 +427,56 @@ export default function WooCommerceOrdersPage() {
 
   // Persistent Map of Tracking Numbers by Order ID
   const [orderTrackingMap, setOrderTrackingMap] = useState<Record<string, string>>(() => {
+    const defaultMap: Record<string, string> = {
+      '115684': 'QB230944874MA',
+      '115803': 'QB230944945MA',
+      '115804': 'QB230944931MA',
+      '115807': 'QB230944931MA',
+      '115814': 'QB230944959MA',
+      '115816': 'QB230944962MA',
+      '115817': 'QB230944976MA',
+      '115818': 'QB236428998MA',
+      '115824': 'QB230944993MA',
+      '115830': 'QB236428984MA',
+      '115841': 'QB230942330MA',
+      '115843': 'QB230942391MA',
+      '115855': 'QB230942480MA',
+      '115856': 'QB230942502MA',
+      '115883': 'QB231919774MA',
+      '115892': 'QB236425197MA',
+      '115897': 'QB231919859MA',
+      '116338': 'QB230909869MA',
+      '116436': 'QB235304382MA',
+      '116437': 'QB235304379MA',
+      '116440': 'QB247139294MA',
+      '116441': 'QB247139285MA',
+    };
     try {
       const saved = localStorage.getItem('wc_order_tracking_map');
-      return saved ? JSON.parse(saved) : {};
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return { ...defaultMap, ...parsed };
+      }
+      return defaultMap;
     } catch {
-      return {};
+      return defaultMap;
     }
   });
 
-  // Load tracking map from server API on mount
+  // Real-time Firestore subscription + Server fallback for Tracking Map
   useEffect(() => {
+    // 1. Initial sync of any existing tracking codes from server file into Firestore
+    syncExistingTrackingToFirestore();
+
+    // 2. Real-time Firestore subscription (syncs Preview <-> Local in real time)
+    const unsubscribe = subscribeToTrackingMap((dbMap) => {
+      setOrderTrackingMap((prev) => {
+        const merged = { ...prev, ...dbMap };
+        return merged;
+      });
+    });
+
+    // 3. Fallback server API fetch
     fetch('/api/tracking/map')
       .then((res) => res.json())
       .then((data) => {
@@ -446,24 +493,21 @@ export default function WooCommerceOrdersPage() {
         }
       })
       .catch((err) => console.warn('Could not fetch server tracking map:', err));
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const handleSaveOrderTrackingNumber = (orderId: number | string, code: string) => {
     const cleanCode = code.trim().toUpperCase();
     const newMap = { ...orderTrackingMap, [orderId]: cleanCode };
     setOrderTrackingMap(newMap);
-    try {
-      localStorage.setItem('wc_order_tracking_map', JSON.stringify(newMap));
-    } catch (e) {
-      console.error('Failed to save tracking number:', e);
-    }
 
-    // Persist on Server so all windows, devices and sessions see it
-    fetch('/api/tracking/map', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderId, code: cleanCode }),
-    }).catch((e) => console.warn('Error saving tracking number on server:', e));
+    // Persist in Firestore DB + localStorage + Server File
+    saveOrderTracking(orderId, cleanCode).catch((e) =>
+      console.warn('Error persisting tracking number:', e)
+    );
 
     if (activeModalOrder && String(activeModalOrder.id) === String(orderId)) {
       activeModalOrder.tracking_number = cleanCode;
@@ -599,22 +643,28 @@ export default function WooCommerceOrdersPage() {
     const cleanCode = code.trim().toUpperCase();
     const cacheKey = `wc_track_${cleanCode}`;
 
-    // Fast client-side cache check (if not forced refresh)
+    // Fast client-side & DB cache check (if not forced refresh)
     if (!forceRefresh) {
       try {
+        let cachedData: any = null;
         const localCached = localStorage.getItem(cacheKey);
         if (localCached) {
-          const parsed = JSON.parse(localCached);
-          const isDone = parsed.isFinished || parsed.currentStep === 4;
-          const elapsed = Date.now() - (parsed.updatedAtMs || (parsed.lastUpdated ? new Date(parsed.lastUpdated).getTime() : 0));
+          cachedData = JSON.parse(localCached);
+        } else {
+          cachedData = await getTrackingResultFromDb(cleanCode);
+        }
+
+        if (cachedData) {
+          const isDone = cachedData.isFinished || cachedData.currentStep === 4;
+          const elapsed = Date.now() - (cachedData.updatedAtMs || (cachedData.lastUpdated ? new Date(cachedData.lastUpdated).getTime() : 0));
           const TWO_HOURS = 2 * 60 * 60 * 1000;
           if (isDone || elapsed < TWO_HOURS) {
-            setTrackingData(parsed.results || []);
-            setTrackingSummary(parsed.summary || null);
-            setTrackingStep(parsed.currentStep || 1);
+            setTrackingData(cachedData.results || []);
+            setTrackingSummary(cachedData.summary || null);
+            setTrackingStep(cachedData.currentStep || 1);
             setTrackingMeta({
               isFinished: isDone,
-              lastUpdated: parsed.lastUpdated,
+              lastUpdated: cachedData.lastUpdated,
               fromCache: true,
               cacheStatus: isDone ? 'completed_final' : 'active_within_2h',
               nextUpdateInMinutes: isDone ? null : Math.max(1, Math.round((TWO_HOURS - elapsed) / 60000)),
@@ -624,7 +674,7 @@ export default function WooCommerceOrdersPage() {
           }
         }
       } catch (err) {
-        console.warn('Local cache check failed:', err);
+        console.warn('Cache check warning:', err);
       }
     }
 
@@ -668,23 +718,16 @@ export default function WooCommerceOrdersPage() {
           nextUpdateInMinutes: data?.nextUpdateInMinutes,
         });
 
-        // Save into local storage for instantaneous instant retrieval
-        try {
-          localStorage.setItem(
-            cacheKey,
-            JSON.stringify({
-              code: cleanCode,
-              summary,
-              results: events,
-              currentStep: step,
-              isFinished,
-              lastUpdated,
-              updatedAtMs: Date.now(),
-            })
-          );
-        } catch (err) {
-          console.warn('LocalStorage save error:', err);
-        }
+        // Save into Firestore DB and LocalStorage for cross-device instant retrieval
+        saveTrackingResultToDb(cleanCode, {
+          code: cleanCode,
+          summary,
+          results: events,
+          currentStep: step,
+          isFinished,
+          lastUpdated,
+          updatedAtMs: Date.now(),
+        }).catch((e) => console.warn('Could not save tracking to DB:', e));
       } else {
         setTrackingData(null);
         setTrackingSummary(null);
@@ -744,21 +787,16 @@ export default function WooCommerceOrdersPage() {
         setShowRawPaste(false);
         showToast('Données de suivi analysées et enregistrées avec succès !', 'success');
 
-        // Cache locally
-        try {
-          localStorage.setItem(
-            `wc_track_${cleanCode}`,
-            JSON.stringify({
-              code: cleanCode,
-              summary: data.summary,
-              results: data.results,
-              currentStep: data.currentStep,
-              isFinished: data.isFinished,
-              lastUpdated: data.lastUpdated,
-              updatedAtMs: Date.now(),
-            })
-          );
-        } catch {}
+        // Cache in Firestore DB & localStorage
+        saveTrackingResultToDb(cleanCode, {
+          code: cleanCode,
+          summary: data.summary,
+          results: data.results,
+          currentStep: data.currentStep,
+          isFinished: data.isFinished,
+          lastUpdated: data.lastUpdated,
+          updatedAtMs: Date.now(),
+        }).catch((e) => console.warn('Could not save parsed tracking to DB:', e));
       } else {
         showToast(data.error || 'Impossible d\'extraire les étapes du texte collé.', 'error');
       }
@@ -784,9 +822,9 @@ export default function WooCommerceOrdersPage() {
       setTrackingError(null);
       setTrackingMeta(null);
       const initCode =
-        activeModalOrder.tracking_number ||
         orderTrackingMap[String(activeModalOrder.id)] ||
         orderTrackingMap[activeModalOrder.id] ||
+        activeModalOrder.tracking_number ||
         (activeModalOrder.meta_data && activeModalOrder.meta_data.find((m: any) => m.key === '_tracking_number')?.value) ||
         '';
       setCustomTrackingInput(initCode);
@@ -820,14 +858,39 @@ export default function WooCommerceOrdersPage() {
     }
   }, [activeModalOrder]);
 
+  // Synchronize tracking code whenever orderTrackingMap updates from Firestore
   useEffect(() => {
-    if (modalTab === 'tracking' && activeModalOrder) {
-      const code = customTrackingInput || activeModalOrder.tracking_number || (activeModalOrder.meta_data && activeModalOrder.meta_data.find((m: any) => m.key === '_tracking_number')?.value) || '';
-      if (code && !trackingData && !trackingLoading && !trackingError) {
-        fetchTrackingData(code);
+    if (activeModalOrder) {
+      const codeFromMap =
+        orderTrackingMap[String(activeModalOrder.id)] ||
+        orderTrackingMap[activeModalOrder.id] ||
+        '';
+      if (codeFromMap && !customTrackingInput) {
+        setCustomTrackingInput(codeFromMap);
+        fetchTrackingData(codeFromMap);
       }
     }
-  }, [modalTab, activeModalOrder]);
+  }, [orderTrackingMap, activeModalOrder]);
+
+  useEffect(() => {
+    if (modalTab === 'tracking' && activeModalOrder) {
+      const code =
+        customTrackingInput ||
+        orderTrackingMap[String(activeModalOrder.id)] ||
+        orderTrackingMap[activeModalOrder.id] ||
+        activeModalOrder.tracking_number ||
+        (activeModalOrder.meta_data && activeModalOrder.meta_data.find((m: any) => m.key === '_tracking_number')?.value) ||
+        '';
+      if (code) {
+        if (!customTrackingInput) {
+          setCustomTrackingInput(code);
+        }
+        if (!trackingData && !trackingLoading && !trackingError) {
+          fetchTrackingData(code);
+        }
+      }
+    }
+  }, [modalTab, activeModalOrder, customTrackingInput, orderTrackingMap]);
 
   const handleSelectTemplateType = (
     type: NotificationTemplateType,
@@ -2774,19 +2837,38 @@ export default function WooCommerceOrdersPage() {
                     <span className="text-xs font-bold text-[#566a7f] dark:text-white hidden sm:inline">Nº Suivi Barid:</span>
                     <input
                       type="text"
-                      value={customTrackingInput}
+                      value={
+                        customTrackingInput ||
+                        orderTrackingMap[String(activeModalOrder.id)] ||
+                        orderTrackingMap[activeModalOrder.id] ||
+                        ''
+                      }
                       onChange={(e) => setCustomTrackingInput(e.target.value)}
                       placeholder="Ex: QB230944826MA"
                       className="px-2.5 py-1 text-xs font-mono font-bold border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-[#2b2c40] text-[#222222] dark:text-white focus:outline-none focus:border-[#696cff] w-36 sm:w-44"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          handleSaveOrderTrackingNumber(activeModalOrder.id, customTrackingInput);
+                          handleSaveOrderTrackingNumber(
+                            activeModalOrder.id,
+                            customTrackingInput ||
+                              orderTrackingMap[String(activeModalOrder.id)] ||
+                              orderTrackingMap[activeModalOrder.id] ||
+                              ''
+                          );
                         }
                       }}
                     />
                     <button
                       type="button"
-                      onClick={() => handleSaveOrderTrackingNumber(activeModalOrder.id, customTrackingInput)}
+                      onClick={() =>
+                        handleSaveOrderTrackingNumber(
+                          activeModalOrder.id,
+                          customTrackingInput ||
+                            orderTrackingMap[String(activeModalOrder.id)] ||
+                            orderTrackingMap[activeModalOrder.id] ||
+                            ''
+                        )
+                      }
                       className="px-3 py-1 rounded-lg text-xs font-bold bg-[#696cff] hover:bg-[#5f61e6] text-white transition-colors cursor-pointer shrink-0 shadow-2xs"
                     >
                       حفظ الكود

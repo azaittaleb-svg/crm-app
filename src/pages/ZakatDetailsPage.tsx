@@ -258,6 +258,7 @@ export default function ZakatDetailsPage() {
           <button
             onClick={() => {
               setNewPayout({
+                titre: '',
                 montant: '',
                 date: new Date().toISOString().split('T')[0],
                 note: '',

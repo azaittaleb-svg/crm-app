@@ -10,7 +10,7 @@ interface NotificationContextType {
 
 interface ConfirmOptions {
   title: string;
-  message: string;
+  message?: string;
   confirmText?: string;
   cancelText?: string;
   variant?: 'danger' | 'info';

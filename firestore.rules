@@ -173,6 +173,16 @@ service cloud.firestore {
       allow update, delete: if isOwner(resource.data);
     }
 
+    match /woo_tracking_map/{orderId} {
+      allow get, list: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    match /woo_tracking_results/{code} {
+      allow get, list: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
     // --- Secure Collection Groups ---
     match /{path=**}/purchases/{id} {
       allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);

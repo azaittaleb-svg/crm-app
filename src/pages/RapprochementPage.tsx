@@ -1199,10 +1199,11 @@ export default function RapprochementPage() {
           const txAmtAbs = Math.abs(tx.amount);
 
           // Use the actual bank transaction date instead of today's date
-          const txDateObj = tx.date?.toDate
-            ? tx.date.toDate()
-            : tx.date
-              ? new Date(tx.date)
+          const txDateVal = tx.date as any;
+          const txDateObj = txDateVal?.toDate
+            ? txDateVal.toDate()
+            : txDateVal
+              ? new Date(txDateVal)
               : new Date();
 
           // Create payment doc inside payments subcollection
@@ -1244,10 +1245,11 @@ export default function RapprochementPage() {
         if (isFullyPaid) {
           // Find latest transaction date
           const latestTxDateObj = allTxsToReconcile.reduce((latest, current) => {
-            const currentD = current.date?.toDate
-              ? current.date.toDate()
-              : current.date
-                ? new Date(current.date)
+            const curVal = current.date as any;
+            const currentD = curVal?.toDate
+              ? curVal.toDate()
+              : curVal
+                ? new Date(curVal)
                 : new Date();
             return currentD > latest ? currentD : latest;
           }, new Date(0));
@@ -1344,10 +1346,11 @@ export default function RapprochementPage() {
         }
 
         // Use the actual bank transaction date instead of today's date
-        const txDateObj = selectedTransaction.date?.toDate
-          ? selectedTransaction.date.toDate()
-          : selectedTransaction.date
-            ? new Date(selectedTransaction.date)
+        const selTxVal = selectedTransaction.date as any;
+        const txDateObj = selTxVal?.toDate
+          ? selTxVal.toDate()
+          : selTxVal
+            ? new Date(selTxVal)
             : new Date();
 
         const newAmountPaid = amountPaid + txAmount;
@@ -1478,10 +1481,11 @@ export default function RapprochementPage() {
           }
 
           // Use the actual bank transaction date instead of today's date
-          const txDateObj = selectedTransaction.date?.toDate
-            ? selectedTransaction.date.toDate()
-            : selectedTransaction.date
-              ? new Date(selectedTransaction.date)
+          const selTxVal2 = selectedTransaction.date as any;
+          const txDateObj = selTxVal2?.toDate
+            ? selTxVal2.toDate()
+            : selTxVal2
+              ? new Date(selTxVal2)
               : new Date();
 
           const newAmountPaid = amountPaid + allocated;

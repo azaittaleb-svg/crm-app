@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { X } from 'lucide-react';
 
-export type ToastType = 'success' | 'error';
+export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 interface ToastProps {
   message: string;
