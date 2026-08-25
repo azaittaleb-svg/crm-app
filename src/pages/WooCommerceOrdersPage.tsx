@@ -2321,6 +2321,33 @@ export default function WooCommerceOrdersPage() {
                             </span>
                           )}
                         </div>
+
+                        {/* Amana Tracking Code Badge */}
+                        {(() => {
+                          const trackingCode =
+                            order.tracking_number ||
+                            orderTrackingMap[String(order.id)] ||
+                            orderTrackingMap[order.id] ||
+                            (order.meta_data &&
+                              order.meta_data.find(
+                                (m: any) =>
+                                  m.key === '_tracking_number' ||
+                                  m.key === 'tracking_number' ||
+                                  m.key === '_amana_tracking'
+                              )?.value) ||
+                            '';
+                          if (!trackingCode) return null;
+
+                          return (
+                            <div
+                              className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 rounded bg-indigo-50/90 dark:bg-[#323249] text-[#696cff] dark:text-[#b1b4ff] border border-indigo-200/80 dark:border-indigo-800/60 text-[10px] font-mono font-bold"
+                              title={`Suivi Amana / Barid : ${trackingCode}`}
+                            >
+                              <Truck size={11} className="shrink-0" />
+                              <span>{trackingCode}</span>
+                            </div>
+                          );
+                        })()}
                       </td>
 
                       <td className="px-5">
