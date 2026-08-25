@@ -303,11 +303,30 @@ router.get('/woocommerce/orders', async (req, res) => {
     const trackingMap = getSavedTrackingMap();
 
     const enrichedOrders = (orders || []).map((ord: any) => {
-      const savedCode = trackingMap[ord.id] || trackingMap[String(ord.id)];
-      if (savedCode) {
+      let code = trackingMap[ord.id] || trackingMap[String(ord.id)];
+      if (!code && Array.isArray(ord.meta_data)) {
+        const meta = ord.meta_data.find((m: any) => 
+          m.key === '_tracking_number' || 
+          m.key === 'tracking_number' || 
+          m.key === '_amana_tracking' || 
+          m.key === 'amana_tracking' ||
+          m.key === '_tracking_code' ||
+          m.key === 'tracking_code' ||
+          m.key === '_amana_code'
+        );
+        if (meta?.value && typeof meta.value === 'string' && meta.value.trim()) {
+          code = meta.value.trim().toUpperCase();
+        }
+      }
+      if (!code && typeof ord.customer_note === 'string') {
+        const match = ord.customer_note.match(/\b([A-Z]{2}\d{9}[A-Z]{2})\b/i);
+        if (match) code = match[1].toUpperCase();
+      }
+
+      if (code) {
         return {
           ...ord,
-          tracking_number: savedCode,
+          tracking_number: code,
         };
       }
       return ord;
@@ -320,9 +339,32 @@ router.get('/woocommerce/orders', async (req, res) => {
   }
 });
 
-router.get('/tracking/map', (req, res) => {
-  const map = getSavedTrackingMap();
-  res.json(map || {});
+router.get('/tracking/map', async (req, res) => {
+  const map = getSavedTrackingMap() || {};
+  try {
+    const orders = await woocommerceService.getOrders(false);
+    if (Array.isArray(orders)) {
+      orders.forEach((ord: any) => {
+        if (!map[String(ord.id)] && Array.isArray(ord.meta_data)) {
+          const meta = ord.meta_data.find((m: any) =>
+            m.key === '_tracking_number' ||
+            m.key === 'tracking_number' ||
+            m.key === '_amana_tracking' ||
+            m.key === 'amana_tracking' ||
+            m.key === '_tracking_code' ||
+            m.key === 'tracking_code' ||
+            m.key === '_amana_code'
+          );
+          if (meta?.value && typeof meta.value === 'string' && meta.value.trim()) {
+            map[String(ord.id)] = meta.value.trim().toUpperCase();
+          }
+        }
+      });
+    }
+  } catch (e) {
+    logger.debug('Auto-tracking map merge note:', e);
+  }
+  res.json(map);
 });
 
 router.post('/tracking/map', (req, res) => {
