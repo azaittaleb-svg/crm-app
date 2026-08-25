@@ -13,6 +13,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { SearchableSelect } from '../components/ui/SearchableSelect';
 import {
   ShoppingCart,
   ArrowLeft,
@@ -51,6 +52,13 @@ interface OrderItem {
 export default function AddSupplierPurchasePage() {
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [selectedSupplierId, setSelectedSupplierId] = useState('');
+
+  const supplierOptions = suppliers.map((sup) => ({
+    value: sup.id,
+    label: sup.name || 'Fournisseur sans nom',
+    subtitle: sup.ice ? `ICE: ${sup.ice}` : sup.phone ? `Tél: ${sup.phone}` : sup.email ? sup.email : undefined,
+    badge: sup.city || undefined,
+  }));
 
   // New Supplier Modal state
   const [showSupplierModal, setShowSupplierModal] = useState(false);
@@ -686,7 +694,7 @@ export default function AddSupplierPurchasePage() {
         setShowAiModal(false);
         setAiContent('');
       } else {
-        showToast('Aucun article trouvé dans le texte.', 'orange');
+        showToast('Aucun article trouvé dans le texte.', 'info');
       }
     } catch (error) {
       console.error(error);
@@ -1457,28 +1465,23 @@ export default function AddSupplierPurchasePage() {
                 <label className="text-[11px] font-bold text-[#a1acb8] uppercase tracking-widest">
                   Fournisseur / Distributeur *
                 </label>
-                <div className="flex gap-2">
-                  <select
-                    required
+                <div className="flex gap-2 items-center">
+                  <SearchableSelect
+                    options={supplierOptions}
                     value={selectedSupplierId}
-                    onChange={(e) => setSelectedSupplierId(e.target.value)}
-                    className="w-full bg-white dark:bg-[#2b2c40] border border-slate-205 focus:ring-2 focus:ring-[#696cff]/20 focus:border-[#696cff] outline-none font-medium text-slate-800 dark:text-[#dbdade] text-xs rounded-lg px-2.5 py-1.5 transition-all cursor-pointer"
-                  >
-                    <option value="" disabled>
-                      -- Choisir --
-                    </option>
-                    {suppliers.map((sup, idx) => (
-                      <option key={sup.id + "_" + idx} value={sup.id}>
-                        {sup.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={setSelectedSupplierId}
+                    placeholder="-- Choisir un fournisseur --"
+                    searchPlaceholder="Rechercher un fournisseur..."
+                    required
+                    className="flex-1"
+                  />
                   <button
                     type="button"
                     onClick={() => setShowSupplierModal(true)}
-                    className="bg-white dark:bg-transparent border border-slate-205 hover:bg-slate-50 p-2 rounded-lg transition-colors flex items-center justify-center shrink-0"
+                    className="bg-white dark:bg-transparent border border-slate-205 dark:border-[#434460]/50 hover:bg-slate-50 dark:hover:bg-[#34354c] p-2 rounded-lg transition-colors flex items-center justify-center shrink-0 h-[34px] w-[34px]"
+                    title="Nouveau Fournisseur"
                   >
-                    <UserPlus size={15} />
+                    <UserPlus size={15} className="text-[#566a7f] dark:text-[#dbdade]" />
                   </button>
                 </div>
               </div>

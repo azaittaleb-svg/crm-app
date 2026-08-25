@@ -22,6 +22,7 @@ import { calculateDocumentTotals } from '../utils/calculations';
 import { useInvoiceFormItems, OrderItem } from '../hooks/useInvoiceFormItems';
 import { COMPANY_INFO } from '../constants';
 import { creditNoteService } from '../services/creditNoteService';
+import { SearchableSelect } from '../components/ui/SearchableSelect';
 import {
   ShoppingCart,
   ArrowLeft,
@@ -52,6 +53,15 @@ export default function AddPurchasePage() {
   const [selectedClientId, setSelectedClientId] = useState('');
   const [linkedPartnerInfo, setLinkedPartnerInfo] = useState<any>(null);
   const [partnerBalance, setPartnerBalance] = useState(0);
+
+  const clientOptions = useMemo(() => {
+    return clients.map((c) => ({
+      value: c.id,
+      label: c.name || 'Client sans nom',
+      subtitle: c.ice ? `ICE: ${c.ice}` : c.phone ? `Tél: ${c.phone}` : c.email ? c.email : undefined,
+      badge: c.city || undefined,
+    }));
+  }, [clients]);
 
   // New Client Modal state
   const [showClientModal, setShowClientModal] = useState(false);
@@ -1167,30 +1177,24 @@ export default function AddPurchasePage() {
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-wider">
                     Client Destinataire
                   </label>
-                  <div className="flex gap-2">
-                    <select
+                  <div className="flex gap-2 items-center">
+                    <SearchableSelect
                       id="client-select-sidebar"
-                      required
+                      options={clientOptions}
                       value={selectedClientId}
-                      onChange={(e) => setSelectedClientId(e.target.value)}
-                      className="flex-1 bg-white dark:bg-[#2b2c40] border border-slate-205 focus:ring-2 focus:ring-[#696cff]/20 focus:border-[#696cff] outline-none font-medium text-slate-800 dark:text-[#dbdade] text-xs rounded-lg px-2.5 py-1.5 transition-all cursor-pointer"
-                    >
-                      <option value="" disabled>
-                        -- Choisir un client --
-                      </option>
-                      {clients.map((client) => (
-                        <option key={client.id} value={client.id}>
-                          {client.name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={setSelectedClientId}
+                      placeholder="-- Choisir un client --"
+                      searchPlaceholder="Rechercher un client (Nom, ICE, Ville)..."
+                      required
+                      className="flex-1"
+                    />
                     <button
                       type="button"
                       onClick={() => setShowClientModal(true)}
-                      className="bg-white dark:bg-transparent border border-slate-205 hover:bg-slate-50 p-2 rounded-lg transition-colors flex items-center justify-center shrink-0"
+                      className="bg-white dark:bg-transparent border border-slate-205 dark:border-[#434460]/50 hover:bg-slate-50 dark:hover:bg-[#34354c] p-2 rounded-lg transition-colors flex items-center justify-center shrink-0 h-[34px] w-[34px]"
                       title="Nouveau Client"
                     >
-                      <UserPlus size={15} />
+                      <UserPlus size={15} className="text-[#566a7f] dark:text-[#dbdade]" />
                     </button>
                   </div>
                 </div>
@@ -1443,31 +1447,22 @@ export default function AddPurchasePage() {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <label className="w-1/3 text-sm font-medium text-slate-700">Client</label>
-                  <div className="w-2/3 flex gap-2">
-                    <div className="relative flex-1">
-                      <select
-                        required
+                  <div className="w-2/3 flex gap-2 items-center">
+                    <div className="flex-1">
+                      <SearchableSelect
+                        options={clientOptions}
                         value={selectedClientId}
-                        onChange={(e) => setSelectedClientId(e.target.value)}
-                        className="w-full bg-white border border-slate-205 focus:ring-2 focus:ring-[#696cff]/20 focus:border-[#696cff] outline-none font-medium text-slate-900 text-sm rounded-lg px-2.5 py-1.5 transition-all appearance-none cursor-pointer"
-                      >
-                        <option value="" disabled>
-                          -- Choisir un client --
-                        </option>
-                        {clients.map((client) => (
-                          <option key={client.id} value={client.id}>
-                            {client.name}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                        <Plus size={14} />
-                      </div>
+                        onChange={setSelectedClientId}
+                        placeholder="-- Choisir un client --"
+                        searchPlaceholder="Rechercher un client (Nom, ICE, Ville)..."
+                        required
+                        className="w-full"
+                      />
                     </div>
                     <button
                       type="button"
                       onClick={() => setShowClientModal(true)}
-                      className="bg-white border border-slate-205 text-slate-700 hover:bg-slate-50 px-2.5 rounded-lg transition-colors flex items-center justify-center shrink-0"
+                      className="bg-white border border-slate-205 text-slate-700 hover:bg-slate-50 p-2 rounded-lg transition-colors flex items-center justify-center shrink-0 h-[34px] w-[34px]"
                       title="Nouveau Client"
                     >
                       <UserPlus size={16} />
@@ -1711,7 +1706,7 @@ export default function AddPurchasePage() {
               <div className="mt-2 flex gap-4">
                 <button
                   type="button"
-                  onClick={addItem}
+                  onClick={() => addItem()}
                   className="flex items-center gap-1.5 text-sm font-medium text-[#696cff] hover:text-[#5f61e6] transition-colors py-2"
                 >
                   Ajouter un produit
