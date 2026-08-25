@@ -51,7 +51,10 @@ export const FinancialFlowMatrix: React.FC<FinancialFlowMatrixProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'cashflow' | 'margins'>('cashflow');
 
-  const currentMonthName = multiMonthStats?.months?.[0]?.name || 'Mois en cours';
+  const currentMonthObj = multiMonthStats?.months?.find((m: any) => m.isCurrentMonth) || multiMonthStats?.months?.[multiMonthStats.months.length - 1];
+  const currentMonthName = currentMonthObj?.fullName
+    ? currentMonthObj.fullName.charAt(0).toUpperCase() + currentMonthObj.fullName.slice(1)
+    : currentMonthObj?.name || 'Mois en cours';
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -79,7 +82,7 @@ export const FinancialFlowMatrix: React.FC<FinancialFlowMatrixProps> = ({
                     : 'text-[#566a7f] dark:text-[#a1acb8] hover:text-[#435971]'
                 }`}
               >
-                Revenus vs Dépenses
+                Bénéfice vs Dépenses
               </button>
               <button
                 onClick={() => setViewMode('margins')}
@@ -98,9 +101,9 @@ export const FinancialFlowMatrix: React.FC<FinancialFlowMatrixProps> = ({
           <div className="grid grid-cols-3 gap-3 mb-4 p-3 bg-slate-50 dark:bg-[#232333] rounded-lg border border-slate-100 dark:border-[#434460]/30">
             <div>
               <span className="text-[11px] font-semibold text-[#a1acb8] dark:text-[#707194] block uppercase">
-                Revenus ({currentMonthName})
+                Bénéfice Woo ({currentMonthName})
               </span>
-              <span className="text-base font-mono font-bold text-[#435971] dark:text-[#dbdade]">
+              <span className="text-base font-mono font-bold text-[#696cff] dark:text-[#b1b4ff]">
                 {(multiMonthStats?.currentIncome || 0).toLocaleString('fr-FR', { maximumFractionDigits: 0 })} DH
               </span>
             </div>
@@ -116,7 +119,7 @@ export const FinancialFlowMatrix: React.FC<FinancialFlowMatrixProps> = ({
               <span className="text-[11px] font-semibold text-[#a1acb8] dark:text-[#707194] block uppercase">
                 Résultat Net
               </span>
-              <span className="text-base font-mono font-bold text-emerald-600 dark:text-emerald-400">
+              <span className={`text-base font-mono font-bold ${(multiMonthStats?.currentProfit || 0) >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
                 {(multiMonthStats?.currentProfit || 0).toLocaleString('fr-FR', { maximumFractionDigits: 0 })} DH
               </span>
             </div>
@@ -156,7 +159,7 @@ export const FinancialFlowMatrix: React.FC<FinancialFlowMatrixProps> = ({
                   <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                   <Area
                     type="monotone"
-                    name="Revenus Encaissés"
+                    name="Bénéfice Woo"
                     dataKey="income"
                     stroke="#696cff"
                     strokeWidth={2.5}

@@ -14,6 +14,7 @@ import { deduplicateExpenses } from "../utils/expenseUtils";
 import { CustomerService } from '../services/customer.service';
 import {
   calculateWooCommerceProfitStats,
+  calculateOrderProfit,
   getStoredWooOrders,
   saveStoredWooOrders,
 } from '../utils/wooProfit';
@@ -663,11 +664,13 @@ export function useDashboardData() {
       d.setMonth(d.getMonth() - i);
       const isCurrentMonth = i === 0;
       const isPrevMonth = i === 1;
+      const shortFr = d.toLocaleDateString('fr-FR', { month: 'short' });
       return {
         date: d,
-        name: d.toLocaleDateString('en-US', { month: 'short' }),
-        monthKey: d.toLocaleDateString('fr-FR', { month: 'numeric', year: 'numeric' }),
-        monthYear: d.toISOString().slice(0, 7),
+        name: shortFr.charAt(0).toUpperCase() + shortFr.slice(1).replace('.', ''),
+        fullName: d.toLocaleDateString('fr-FR', { month: 'long' }),
+        monthKey: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+        monthYear: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
         isCurrentMonth,
         isPrevMonth,
         income: 0,
@@ -677,62 +680,31 @@ export function useDashboardData() {
       };
     }).reverse();
 
-    validPurchases.forEach((p) => {
-      const pDate = p.date?.toDate ? p.date.toDate() : p.date ? new Date(p.date) : null;
-      if (pDate) {
-        const pKey = pDate.toLocaleDateString('fr-FR', { month: 'numeric', year: 'numeric' });
-        const m = months.find((m) => m.monthKey === pKey);
-        if (m) {
-          const total = Number(p.total) || 0;
-          const isPaid =
-            p.paymentStatus === 'paid' ||
-            p.status === 'Payée' ||
-            Number(p.total) - (Number(p.amountPaid) || 0) <= 0.05;
-          const paid = p.amountPaid !== undefined ? Number(p.amountPaid) : isPaid ? total : 0;
-
-          const isCreditNote = p.refId?.startsWith('RINV/');
-          if (isCreditNote) {
-            m.income -= paid;
-            m.earnings -= total;
-          } else {
-            m.income += paid;
-            m.earnings += total;
-          }
-          m.salesCount += 1;
-        }
-      }
-    });
-
-    // Add WooCommerce profits directly to monthly income/earnings
+    // Calculate exact WooCommerce net profit (bénéfice net calculé exactement comme dans la page Woo)
     if (wooOrders && wooOrders.length > 0) {
       wooOrders.forEach((order) => {
-        if (order.status === 'completed') {
-          const orderDate = new Date(order.date_created || order.date_created_gmt);
-          const pKey = orderDate.toLocaleDateString('fr-FR', { month: 'numeric', year: 'numeric' });
-          const m = months.find((m) => m.monthKey === pKey);
-          if (m) {
-            const total = parseFloat(order.total) || 0;
-            // Assuming average margin for woo orders is what's used in profit, let's just add the profit
-            // Wait, the user wants to compare expenses with woo profit specifically? 
-            // "adir liha entre depence dialna dial chaque moi m3a l benifice li 3endna li kayn f la page woo"
-            // Let's add Woo Profit to the income of the month so it gets compared against expenses.
-            // Profit is calculated by subtracting VitPOS purchase price from order total.
-            let profit = 0;
-            order.line_items?.forEach((item: any) => {
-              const itemTotal = parseFloat(item.total) || 0;
-              const originalCost = parseFloat(item.meta_data?.find((m: any) => m.key === '_vitpos_purchase_price')?.value || '0');
-              const itemProfit = itemTotal - (originalCost > 0 ? originalCost * item.quantity : 0);
-              profit += itemProfit;
-            });
-
-            // We add the WooCommerce profit to the income
-            m.income += profit;
-            m.earnings += profit; 
+        const { isCompleted, isCancelled, profit } = calculateOrderProfit(order);
+        if (isCompleted && !isCancelled) {
+          const dateStr = order.date_created || order.date_completed || order.date_paid;
+          if (dateStr) {
+            const orderDate = new Date(dateStr);
+            if (!isNaN(orderDate.getTime())) {
+              const year = orderDate.getFullYear();
+              const month = String(orderDate.getMonth() + 1).padStart(2, '0');
+              const pKey = `${year}-${month}`;
+              const m = months.find((m) => m.monthKey === pKey);
+              if (m) {
+                m.income += profit;
+                m.earnings += profit;
+                m.salesCount += 1;
+              }
+            }
           }
         }
       });
     }
 
+    // 3. Add Monthly Expenses
     allExpenses.forEach((e) => {
       if (e.monthYear) {
         const m = months.find((m) => m.monthYear === e.monthYear);
