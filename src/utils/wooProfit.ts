@@ -411,6 +411,36 @@ export function getLineItemPurchasePrice(item: any, orderId?: string | number): 
   return 0;
 }
 
+export function getOrderExtraFeesAmount(order: any): {
+  totalFees: number;
+  feeDetails: Array<{ name: string; amount: number }>;
+} {
+  if (!order || !Array.isArray(order.fee_lines)) {
+    return { totalFees: 0, feeDetails: [] };
+  }
+  let totalFees = 0;
+  const feeDetails: Array<{ name: string; amount: number }> = [];
+
+  for (const fee of order.fee_lines) {
+    const name = (fee.name || fee.title || '').toLowerCase();
+    const feeAmount = parseFloat(fee.total || '0') || 0;
+
+    const isCodFee =
+      name.includes('cod balance') ||
+      name.includes('due on delivery') ||
+      name.includes('deposit') ||
+      name.includes('acompte') ||
+      name.includes('solde');
+
+    if (!isCodFee && feeAmount > 0) {
+      totalFees += feeAmount;
+      feeDetails.push({ name: fee.name || fee.title || 'Frais / Main d’œuvre', amount: feeAmount });
+    }
+  }
+
+  return { totalFees, feeDetails };
+}
+
 export function getOrderDiscountAmount(order: any): number {
   if (!order) return 0;
   let discount = parseFloat(order.discount_total || '0') || 0;
@@ -605,8 +635,11 @@ export function calculateOrderProfit(order: any) {
     hasMissingCost = true;
   }
 
-  const profit = isCancelled ? 0 : merchandiseSales - totalPurchaseCost;
-  const margin = isCancelled || merchandiseSales <= 0 ? 0 : (profit / merchandiseSales) * 100;
+  const { totalFees: extraFees, feeDetails: feeLinesDetails } = getOrderExtraFeesAmount(order);
+  const totalSelling = isCancelled ? 0 : merchandiseSales + extraFees;
+
+  const profit = isCancelled ? 0 : totalSelling - totalPurchaseCost;
+  const margin = isCancelled || totalSelling <= 0 ? 0 : (profit / totalSelling) * 100;
 
   // Detect COD Deposit / Partial Payment
   let isCodDeposit = false;
@@ -640,7 +673,10 @@ export function calculateOrderProfit(order: any) {
   return {
     isCompleted,
     isCancelled,
-    totalSelling: isCancelled ? 0 : merchandiseSales,
+    merchandiseSales,
+    extraFees,
+    feeLinesDetails,
+    totalSelling,
     totalPurchaseCost,
     hasMissingCost,
     orderDiscount,
@@ -664,6 +700,7 @@ export function getOrderFullTotal(order: any): {
 
   const rawTotal = parseFloat(order.total || '0') || 0;
   const shippingTotal = parseFloat(order.shipping_total || '0') || 0;
+  const { totalFees: extraFees } = getOrderExtraFeesAmount(order);
 
   let lineItemsTotal = 0;
   if (Array.isArray(order.line_items) && order.line_items.length > 0) {
@@ -673,7 +710,7 @@ export function getOrderFullTotal(order: any): {
   }
 
   const discount = getOrderDiscountAmount(order);
-  const calculatedFullValue = Math.max(0, lineItemsTotal + shippingTotal - discount);
+  const calculatedFullValue = Math.max(0, lineItemsTotal + shippingTotal + extraFees - discount);
 
   let isCodDeposit = false;
   let codBalanceDue = 0;

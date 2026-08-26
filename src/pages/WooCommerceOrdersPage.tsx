@@ -3517,13 +3517,31 @@ export default function WooCommerceOrdersPage() {
                           <div className="flex justify-between items-center text-xs">
                             <span className="text-slate-700 dark:text-[#a1acb8] font-medium">Sous-total Ventes (Marchandises) :</span>
                             <span className="font-mono font-bold text-[#222222] dark:text-white">
-                              {orderProfitData.totalSelling.toLocaleString('fr-FR', {
+                              {(orderProfitData.merchandiseSales || orderProfitData.totalSelling).toLocaleString('fr-FR', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                               })}{' '}
                               MAD
                             </span>
                           </div>
+
+                          {(orderProfitData.extraFees || 0) > 0 && (
+                            <div className="flex justify-between items-center text-xs text-indigo-600 dark:text-indigo-400 font-semibold">
+                              <span>
+                                {orderProfitData.feeLinesDetails && orderProfitData.feeLinesDetails.length > 0
+                                  ? orderProfitData.feeLinesDetails.map((f: any) => f.name).join(', ')
+                                  : 'Frais / Main d’œuvre :'}
+                              </span>
+                              <span className="font-mono">
+                                +
+                                {orderProfitData.extraFees.toLocaleString('fr-FR', {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}{' '}
+                                MAD
+                              </span>
+                            </div>
+                          )}
 
                           {parseFloat(activeModalOrder.shipping_total || '0') > 0 && (
                             <div className="flex justify-between items-center text-xs">
