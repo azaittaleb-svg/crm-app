@@ -172,12 +172,16 @@ export const exportBackupData = async (uid: string) => {
       );
       for (const p of purchasesSnap.docs) {
         const purchaseData = { id: p.id, ...p.data(), audit_logs: [] as any[] };
-        const auditLogsSnap = await getDocs(
-          collection(db, 'clients', d.id, 'purchases', p.id, 'audit_logs')
-        );
-        auditLogsSnap.forEach((l) => {
-          purchaseData.audit_logs.push({ id: l.id, ...l.data() });
-        });
+        try {
+          const auditLogsSnap = await getDocs(
+            collection(db, 'clients', d.id, 'purchases', p.id, 'audit_logs')
+          );
+          auditLogsSnap.forEach((l) => {
+            purchaseData.audit_logs.push({ id: l.id, ...l.data() });
+          });
+        } catch (auditErr) {
+          console.warn('Could not fetch audit_logs for purchase:', p.id, auditErr);
+        }
         clientData.purchases.push(purchaseData);
       }
 
@@ -320,13 +324,27 @@ export const exportBackupData = async (uid: string) => {
       console.warn('Could not fetch zakat password doc:', e);
     }
 
-    // VAT audit trail (queried by calculatedBy)
-    const vatAuditSnap = await getDocs(
-      query(collection(db, 'vat_audit_trail'), where('calculatedBy', '==', uid))
-    );
-    vatAuditSnap.forEach((d) => {
-      exportData.vat_audit_trail.push({ id: d.id, ...d.data() });
-    });
+    // VAT audit trail (queried by calculatedBy or ownerId)
+    try {
+      const vatAuditSnap = await getDocs(
+        query(collection(db, 'vat_audit_trail'), where('calculatedBy', '==', uid))
+      );
+      vatAuditSnap.forEach((d) => {
+        exportData.vat_audit_trail.push({ id: d.id, ...d.data() });
+      });
+    } catch (e) {
+      console.warn('Could not fetch vat_audit_trail by calculatedBy, trying ownerId:', e);
+      try {
+        const vatAuditSnap2 = await getDocs(
+          query(collection(db, 'vat_audit_trail'), where('ownerId', '==', uid))
+        );
+        vatAuditSnap2.forEach((d) => {
+          exportData.vat_audit_trail.push({ id: d.id, ...d.data() });
+        });
+      } catch (e2) {
+        console.warn('Could not fetch vat_audit_trail:', e2);
+      }
+    }
 
     // Serialize Timestamps
     const jsonString = JSON.stringify(

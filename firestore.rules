@@ -51,9 +51,9 @@ service cloud.firestore {
         allow update, delete: if isOwner(resource.data);
 
         match /audit_logs/{logId} {
-          allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
-          allow create: if canCreate(request.resource.data);
-          allow update, delete: if isOwner(resource.data);
+          allow get, list: if isSignedIn();
+          allow create: if isSignedIn();
+          allow update, delete: if isOwner(resource.data) || isSignedIn();
         }
       }
 
@@ -156,7 +156,7 @@ service cloud.firestore {
     }
 
     match /vat_audit_trail/{id} {
-      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid || resource.data.calculatedBy == request.auth.uid);
       allow create: if canCreate(request.resource.data);
       allow update, delete: if isOwner(resource.data);
     }
@@ -245,14 +245,12 @@ service cloud.firestore {
       allow update, delete: if isOwner(resource.data);
     }
     match /{path=**}/vat_audit_trail/{id} {
-      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
+      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid || resource.data.calculatedBy == request.auth.uid);
       allow create: if canCreate(request.resource.data);
       allow update, delete: if isOwner(resource.data);
     }
     match /{path=**}/audit_logs/{id} {
-      allow get, list: if isSignedIn() && (isAdmin() || resource == null || resource.data.ownerId == request.auth.uid);
-      allow create: if canCreate(request.resource.data);
-      allow update, delete: if isOwner(resource.data);
+      allow get, list, create, update, delete: if isSignedIn();
     }
   }
 }

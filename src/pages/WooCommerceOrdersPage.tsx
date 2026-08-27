@@ -954,7 +954,7 @@ export default function WooCommerceOrdersPage() {
     setTimeout(() => setCopiedRib(false), 2000);
   };
 
-  const handleOpenMailto = async () => {
+  const handleOpenMailto = () => {
     if (!activeModalOrder?.billing?.email) {
       showToast("Cette commande n'a pas d'adresse e-mail renseignée", 'error');
       return;
@@ -964,21 +964,8 @@ export default function WooCommerceOrdersPage() {
     )}&body=${encodeURIComponent(emailBodyInput)}`;
     saveReminderSent(activeModalOrder.id, 'mailto', emailAvanceAmount, emailTemplateType);
     setOrders((prev) => [...prev]);
-    await handleAutoSyncReceipt(true);
-    showToast(`${getTemplateLabel(emailTemplateType)} marqué(e) comme envoyé(e) & Reçu mis à jour`, 'success');
+    showToast(`${getTemplateLabel(emailTemplateType)} marqué(e) comme envoyé(e)`, 'success');
     window.open(mailtoUrl, '_blank');
-  };
-
-  const handleAutoSyncReceipt = async (silent = false) => {
-    if (!activeModalOrder) return;
-    try {
-      await createDocumentsForOrders([activeModalOrder], 'commande');
-      if (!silent) {
-        showToast(`Reçu pour la commande #${activeModalOrder.id} mis à jour avec succès en base (${emailAvanceAmount} DH) !`, 'success');
-      }
-    } catch (err) {
-      console.error('Error auto-syncing receipt:', err);
-    }
   };
 
   const handleOpenWhatsApp = async () => {
@@ -1004,9 +991,7 @@ export default function WooCommerceOrdersPage() {
         if (result.success) {
           saveReminderSent(activeModalOrder.id, 'whatsapp', emailAvanceAmount, emailTemplateType);
           setOrders((prev) => [...prev]);
-          // Auto-sync receipt
-          await handleAutoSyncReceipt(true);
-          showToast(`${getTemplateLabel(emailTemplateType)} envoyé(e) via WhatsApp & Reçu synchronisé`, 'success');
+          showToast(`${getTemplateLabel(emailTemplateType)} envoyé(e) via WhatsApp`, 'success');
         } else {
           showToast('Erreur WhatsApp: ' + result.error, 'error');
         }
@@ -1029,10 +1014,7 @@ export default function WooCommerceOrdersPage() {
       saveReminderSent(activeModalOrder.id, 'email', emailAvanceAmount, emailTemplateType);
       setOrders((prev) => [...prev]);
 
-      // Auto-sync receipt
-      await handleAutoSyncReceipt(true);
-
-      showToast(`E-mail de ${getTemplateLabel(emailTemplateType).toLowerCase()} envoyé avec succès à ${activeModalOrder.billing.email} & Reçu mis à jour !`, 'success');
+      showToast(`E-mail de ${getTemplateLabel(emailTemplateType).toLowerCase()} envoyé avec succès à ${activeModalOrder.billing.email} !`, 'success');
     } catch (err: any) {
       console.error('Error sending direct email:', err);
       showToast(err?.message || "Impossible d'envoyer l'e-mail.", 'error');
@@ -1041,7 +1023,7 @@ export default function WooCommerceOrdersPage() {
     }
   };
 
-  const handleToggleReminderManual = async () => {
+  const handleToggleReminderManual = () => {
     if (!activeModalOrder) return;
     const existing = getReminderSentInfo(activeModalOrder.id);
     if (existing) {
@@ -1049,8 +1031,7 @@ export default function WooCommerceOrdersPage() {
       showToast('Statut de communication réinitialisé', 'info');
     } else {
       saveReminderSent(activeModalOrder.id, 'manual', emailAvanceAmount, emailTemplateType);
-      await handleAutoSyncReceipt(true);
-      showToast('Commande marquée comme envoyée manuellement & Reçu mis à jour', 'success');
+      showToast('Statut de communication marqué comme envoyé', 'success');
     }
     setOrders((prev) => [...prev]);
   };
