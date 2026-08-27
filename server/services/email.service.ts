@@ -30,7 +30,7 @@ export class EmailService {
       throw new Error("L'adresse destinataire est requise.");
     }
 
-    const transporter = nodemailer.createTransport({
+    const transportOptions: any = {
       service: 'gmail',
       connectionTimeout: timeout,
       greetingTimeout: timeout,
@@ -39,7 +39,19 @@ export class EmailService {
         user: senderEmail.trim(),
         pass: senderPassword.trim().replace(/\s+/g, ''),
       },
-    });
+      tls: {
+        rejectUnauthorized: false,
+      },
+    };
+
+    if (smtpConfig.host) {
+      delete transportOptions.service;
+      transportOptions.host = smtpConfig.host.trim();
+      transportOptions.port = smtpConfig.port;
+      transportOptions.secure = smtpConfig.secure;
+    }
+
+    const transporter = nodemailer.createTransport(transportOptions);
 
     const attachments: any[] = [];
     if (pdfBase64) {
