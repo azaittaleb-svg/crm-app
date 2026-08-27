@@ -18,7 +18,10 @@ export class EmailService {
     attachmentName,
     pdfBase64,
   }: SendEmailParams): Promise<void> {
-    const { senderEmail, senderPassword, timeout } = smtpConfig;
+    const senderEmail = (process.env.SENDER_EMAIL || smtpConfig.senderEmail || '').trim();
+    const senderPassword = (process.env.SENDER_PASSWORD || smtpConfig.senderPassword || '').trim();
+    const timeout = parseInt(process.env.SMTP_TIMEOUT || String(smtpConfig.timeout || 15000), 10);
+    const smtpHost = (process.env.SMTP_HOST || smtpConfig.host || '').trim();
 
     if (!senderEmail || !senderPassword) {
       throw new Error(
@@ -36,19 +39,19 @@ export class EmailService {
       greetingTimeout: timeout,
       socketTimeout: timeout,
       auth: {
-        user: senderEmail.trim(),
-        pass: senderPassword.trim().replace(/\s+/g, ''),
+        user: senderEmail,
+        pass: senderPassword.replace(/\s+/g, ''),
       },
       tls: {
         rejectUnauthorized: false,
       },
     };
 
-    if (smtpConfig.host) {
+    if (smtpHost) {
       delete transportOptions.service;
-      transportOptions.host = smtpConfig.host.trim();
-      transportOptions.port = smtpConfig.port;
-      transportOptions.secure = smtpConfig.secure;
+      transportOptions.host = smtpHost;
+      transportOptions.port = parseInt(process.env.SMTP_PORT || String(smtpConfig.port || 465), 10);
+      transportOptions.secure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : (smtpConfig.secure ?? true);
     }
 
     const transporter = nodemailer.createTransport(transportOptions);
