@@ -24,6 +24,22 @@ let cachedConfig: OpenWaConfig = { ...DEFAULT_FALLBACK_CONFIG };
 let lastFetchTime = 0;
 
 async function getTunnelConfig(forceRefresh = false): Promise<OpenWaConfig> {
+  const localUrl = process.env.OPENWA_URL || 'http://localhost:2785';
+  try {
+    const healthRes = await fetch(`${localUrl}/api/health`, { signal: AbortSignal.timeout(1500) });
+    if (healthRes.ok) {
+      return {
+        url: localUrl,
+        apiBase: `${localUrl}/api`,
+        webhooks: `${localUrl}/api/webhooks`,
+        updatedAt: new Date().toISOString(),
+        status: 'online',
+      };
+    }
+  } catch (e) {
+    // Localhost not available, fallback to tunnel
+  }
+
   const now = Date.now();
   if (!forceRefresh && now - lastFetchTime < 15000) {
     return cachedConfig;

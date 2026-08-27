@@ -1,6 +1,512 @@
 {
   "orders": [
     {
+      "id": 116450,
+      "parent_id": 0,
+      "status": "on-hold",
+      "currency": "MAD",
+      "version": "11.0.1",
+      "prices_include_tax": false,
+      "date_created": "2026-08-26T21:17:25",
+      "date_modified": "2026-08-26T21:17:29",
+      "discount_total": "0",
+      "discount_tax": "0",
+      "shipping_total": "45",
+      "shipping_tax": "0",
+      "cart_tax": "0",
+      "total": "50",
+      "total_tax": "0",
+      "customer_id": 138,
+      "order_key": "wc_order_4PPCBkcv8I7VX",
+      "billing": {
+        "first_name": "Yassine",
+        "last_name": "Moulim",
+        "company": "",
+        "address_1": "733 lot el fath",
+        "address_2": "",
+        "city": "khouribga",
+        "state": "",
+        "postcode": "25000",
+        "country": "MA",
+        "email": "yyassineox@gmail.com",
+        "phone": "0608707655"
+      },
+      "shipping": {
+        "first_name": "Yassine",
+        "last_name": "Moulim",
+        "company": "",
+        "address_1": "733 lot el fath",
+        "address_2": "",
+        "city": "khouribga",
+        "state": "",
+        "postcode": "25000",
+        "country": "MA",
+        "phone": "0608707655"
+      },
+      "payment_method": "bacs",
+      "payment_method_title": "Virement bancaire",
+      "transaction_id": "",
+      "customer_ip_address": "172.70.108.175",
+      "customer_user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36",
+      "created_via": "checkout",
+      "customer_note": "",
+      "date_completed": null,
+      "date_paid": null,
+      "cart_hash": "763117fdf26f28054f5be86ec7e7c02a",
+      "number": "115144",
+      "meta_data": [
+        {
+          "id": 12096,
+          "key": "_cfw",
+          "value": "true"
+        },
+        {
+          "id": 12094,
+          "key": "_hs_cod_applied_rule_id",
+          "value": "rule_XwKUiHHG"
+        },
+        {
+          "id": 12092,
+          "key": "_hs_cod_deposit_amount",
+          "value": "50"
+        },
+        {
+          "id": 12095,
+          "key": "_hs_cod_deposit_paid",
+          "value": "yes"
+        },
+        {
+          "id": 12093,
+          "key": "_hs_cod_remaining_amount",
+          "value": "385"
+        },
+        {
+          "id": 12091,
+          "key": "_order_number",
+          "value": "115144"
+        },
+        {
+          "id": 12104,
+          "key": "_wc_order_attribution_device_type",
+          "value": "Mobile"
+        },
+        {
+          "id": 12102,
+          "key": "_wc_order_attribution_session_count",
+          "value": "1"
+        },
+        {
+          "id": 12099,
+          "key": "_wc_order_attribution_session_entry",
+          "value": "https://www.workstation.ma/produit/xpg-gammix-d35-16go-ddr4-3600-mhz/"
+        },
+        {
+          "id": 12101,
+          "key": "_wc_order_attribution_session_pages",
+          "value": "11"
+        },
+        {
+          "id": 12100,
+          "key": "_wc_order_attribution_session_start_time",
+          "value": "2026-08-26 21:10:41"
+        },
+        {
+          "id": 12097,
+          "key": "_wc_order_attribution_source_type",
+          "value": "typein"
+        },
+        {
+          "id": 12103,
+          "key": "_wc_order_attribution_user_agent",
+          "value": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36"
+        },
+        {
+          "id": 12098,
+          "key": "_wc_order_attribution_utm_source",
+          "value": "(direct)"
+        },
+        {
+          "id": 12088,
+          "key": "is_vat_exempt",
+          "value": "no"
+        }
+      ],
+      "line_items": [
+        {
+          "id": 1335,
+          "name": "Samsung PM9C1 256 Go Nvme PCIe Gen4",
+          "product_id": 115329,
+          "variation_id": 0,
+          "quantity": 1,
+          "tax_class": "",
+          "subtotal": "390",
+          "subtotal_tax": "0",
+          "total": "390",
+          "total_tax": "0",
+          "taxes": [],
+          "meta_data": [
+            {
+              "id": 12353,
+              "key": "_reduced_stock",
+              "value": "1",
+              "display_key": "_reduced_stock",
+              "display_value": "1"
+            }
+          ],
+          "sku": "PM9C1D256",
+          "global_unique_id": "",
+          "price": 390,
+          "image": {
+            "id": "115330",
+            "src": "https://www.workstation.ma/wp-content/uploads/2026/02/Samsung-PM9C1-256-Go.jpg"
+          },
+          "parent_name": null,
+          "cost_of_goods_sold": {
+            "value": 210
+          },
+          "purchase_price": 210
+        }
+      ],
+      "tax_lines": [],
+      "shipping_lines": [
+        {
+          "id": 1337,
+          "method_title": "Amana Messagerie (T)",
+          "method_id": "flat_rate",
+          "instance_id": "5",
+          "total": "45",
+          "total_tax": "0",
+          "taxes": [],
+          "tax_status": "taxable",
+          "meta_data": [
+            {
+              "id": 12352,
+              "key": "Articles",
+              "value": "Samsung PM9C1 256 Go Nvme PCIe Gen4 &times; 1",
+              "display_key": "Articles",
+              "display_value": "Samsung PM9C1 256 Go Nvme PCIe Gen4 &times; 1"
+            }
+          ]
+        }
+      ],
+      "fee_lines": [
+        {
+          "id": 1336,
+          "name": "COD Balance (Due on Delivery)",
+          "tax_class": "0",
+          "tax_status": "taxable",
+          "amount": "-385",
+          "total": "-385",
+          "total_tax": "0",
+          "taxes": [],
+          "meta_data": []
+        }
+      ],
+      "coupon_lines": [],
+      "refunds": [],
+      "payment_url": "https://www.workstation.ma/checkout/order-pay/116450/?pay_for_order=true&key=wc_order_4PPCBkcv8I7VX",
+      "is_editable": true,
+      "needs_payment": false,
+      "needs_processing": true,
+      "date_created_gmt": "2026-08-26T21:17:25",
+      "date_modified_gmt": "2026-08-26T21:17:29",
+      "date_completed_gmt": null,
+      "date_paid_gmt": null,
+      "cost_of_goods_sold": {
+        "total_value": 210
+      },
+      "currency_symbol": "MAD",
+      "_links": {
+        "self": [
+          {
+            "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116450",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://www.workstation.ma/wp-json/wc/v3/orders"
+          }
+        ],
+        "email_templates": [
+          {
+            "embeddable": true,
+            "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116450/actions/email_templates"
+          }
+        ],
+        "customer": [
+          {
+            "href": "https://www.workstation.ma/wp-json/wc/v3/customers/138"
+          }
+        ]
+      }
+    },
+    {
+      "id": 116447,
+      "parent_id": 0,
+      "status": "cancelled",
+      "currency": "MAD",
+      "version": "11.0.1",
+      "prices_include_tax": true,
+      "date_created": "2026-08-26T11:16:40",
+      "date_modified": "2026-08-26T11:45:37",
+      "discount_total": "0",
+      "discount_tax": "0",
+      "shipping_total": "0",
+      "shipping_tax": "0",
+      "cart_tax": "0",
+      "total": "3349",
+      "total_tax": "0",
+      "customer_id": 0,
+      "order_key": "wc_order_UAutZDxTkyRqo",
+      "billing": {
+        "first_name": "Abdelhalim",
+        "last_name": "Farkane",
+        "company": "",
+        "address_1": "av mly abdellah NR 80 hay nahda karia salé",
+        "address_2": "",
+        "city": "salé",
+        "state": "MASAL",
+        "postcode": "11100",
+        "country": "MA",
+        "email": "viperschaine@gmail.com",
+        "phone": "0637283828"
+      },
+      "shipping": {
+        "first_name": "Abdelhalim",
+        "last_name": "Farkane",
+        "company": "",
+        "address_1": "av mly abdellah NR 80 hay nahda karia salé",
+        "address_2": "",
+        "city": "salé",
+        "state": "MASAL",
+        "postcode": "11100",
+        "country": "MA",
+        "phone": ""
+      },
+      "payment_method": "cod",
+      "payment_method_title": "Paiement en espèces",
+      "transaction_id": "",
+      "customer_ip_address": "172.68.102.55",
+      "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
+      "created_via": "checkout",
+      "customer_note": "",
+      "date_completed": null,
+      "date_paid": null,
+      "cart_hash": "",
+      "number": "115143",
+      "meta_data": [
+        {
+          "id": 12065,
+          "key": "_billing_full_name",
+          "value": "abdelhalim farkane"
+        },
+        {
+          "id": 12066,
+          "key": "_cfw",
+          "value": "true"
+        },
+        {
+          "id": 12068,
+          "key": "_order_number",
+          "value": "115143"
+        },
+        {
+          "id": 12069,
+          "key": "_shipping_full_name",
+          "value": "abdelhalim farkane"
+        },
+        {
+          "id": 12070,
+          "key": "_wc_order_attribution_device_type",
+          "value": "Desktop"
+        },
+        {
+          "id": 12071,
+          "key": "_wc_order_attribution_session_count",
+          "value": "1"
+        },
+        {
+          "id": 12072,
+          "key": "_wc_order_attribution_session_entry",
+          "value": "https://pcgamermaroc.ma/"
+        },
+        {
+          "id": 12073,
+          "key": "_wc_order_attribution_session_pages",
+          "value": "20"
+        },
+        {
+          "id": 12074,
+          "key": "_wc_order_attribution_session_start_time",
+          "value": "2026-08-26 12:03:04"
+        },
+        {
+          "id": 12075,
+          "key": "_wc_order_attribution_source_type",
+          "value": "typein"
+        },
+        {
+          "id": 12076,
+          "key": "_wc_order_attribution_user_agent",
+          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+        },
+        {
+          "id": 12077,
+          "key": "_wc_order_attribution_utm_source",
+          "value": "(direct)"
+        },
+        {
+          "id": 12078,
+          "key": "is_vat_exempt",
+          "value": "no"
+        },
+        {
+          "id": 12079,
+          "key": "WOONET_IMPORT_ORDER_MAP_OID_6316_SID_df665d9746ea02fff2bcdca65ff1cda8",
+          "value": "1"
+        },
+        {
+          "id": 12080,
+          "key": "WOONET_PARENT_ORDER_ORIGIN_SID",
+          "value": "df665d9746ea02fff2bcdca65ff1cda8"
+        },
+        {
+          "id": 12081,
+          "key": "WOONET_PARENT_ORDER_ORIGIN_PID",
+          "value": "6316"
+        },
+        {
+          "id": 12082,
+          "key": "WOONET_PARENT_ORDER_ORIGIN_URL",
+          "value": "https://pcgamermaroc.ma"
+        },
+        {
+          "id": 12083,
+          "key": "WOONET_PARENT_ORDER_ORIGIN_TEXT",
+          "value": "https://pcgamermaroc.ma | #115143"
+        },
+        {
+          "id": 12084,
+          "key": "WOONET_PARENT_ORDER_ORIGIN_ID",
+          "value": "6316"
+        }
+      ],
+      "line_items": [
+        {
+          "id": 1334,
+          "name": "PNY GeForce RTX 5050 8 Go",
+          "cogs_value": null,
+          "product_id": 9813,
+          "variation_id": 0,
+          "quantity": 1,
+          "tax_class": "",
+          "subtotal": "3349",
+          "subtotal_tax": "0",
+          "total": "3349",
+          "total_tax": "0",
+          "taxes": [],
+          "meta_data": [
+            {
+              "id": 12329,
+              "key": "_woonet_line_item_site_df665d9746ea02fff2bcdca65ff1cda8_id_50",
+              "value": "yes",
+              "display_key": "_woonet_line_item_site_df665d9746ea02fff2bcdca65ff1cda8_id_50",
+              "display_value": "yes"
+            },
+            {
+              "id": 12330,
+              "key": "_reduced_stock",
+              "value": "1",
+              "display_key": "_reduced_stock",
+              "display_value": "1"
+            }
+          ],
+          "sku": "VCG50508DFXPB1",
+          "global_unique_id": "4718006459734",
+          "price": 3349,
+          "image": {
+            "id": "9808",
+            "src": "https://www.workstation.ma/wp-content/uploads/2025/10/1-PNY-RTX-5050-STD-Dual-Fan-ra.png"
+          },
+          "parent_name": null,
+          "purchase_price": 2870
+        }
+      ],
+      "tax_lines": [],
+      "shipping_lines": [
+        {
+          "id": 1333,
+          "method_title": "Livraison express à domicile",
+          "method_id": "free_shipping",
+          "instance_id": "1",
+          "total": "0",
+          "total_tax": "0",
+          "taxes": [],
+          "tax_status": "taxable",
+          "meta_data": [
+            {
+              "id": 12320,
+              "key": "_woonet_line_item_site_df665d9746ea02fff2bcdca65ff1cda8_id_51",
+              "value": "yes",
+              "display_key": "_woonet_line_item_site_df665d9746ea02fff2bcdca65ff1cda8_id_51",
+              "display_value": "yes"
+            }
+          ]
+        }
+      ],
+      "fee_lines": [],
+      "coupon_lines": [],
+      "refunds": [],
+      "payment_url": "https://www.workstation.ma/checkout/order-pay/116447/?pay_for_order=true&key=wc_order_UAutZDxTkyRqo",
+      "is_editable": false,
+      "needs_payment": false,
+      "needs_processing": true,
+      "date_created_gmt": "2026-08-26T11:16:40",
+      "date_modified_gmt": "2026-08-26T11:45:37",
+      "date_completed_gmt": null,
+      "date_paid_gmt": null,
+      "cost_of_goods_sold": {
+        "total_value": 0
+      },
+      "currency_symbol": "MAD",
+      "_links": {
+        "self": [
+          {
+            "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116447",
+            "targetHints": {
+              "allow": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+              ]
+            }
+          }
+        ],
+        "collection": [
+          {
+            "href": "https://www.workstation.ma/wp-json/wc/v3/orders"
+          }
+        ],
+        "email_templates": [
+          {
+            "embeddable": true,
+            "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116447/actions/email_templates"
+          }
+        ]
+      }
+    },
+    {
       "id": 116443,
       "parent_id": 0,
       "status": "completed",
@@ -56,34 +562,9 @@
       "number": "115142",
       "meta_data": [
         {
-          "id": 12047,
-          "key": "_is_vitepos",
-          "value": "Y"
-        },
-        {
           "id": 12042,
           "key": "_order_number",
           "value": "115142"
-        },
-        {
-          "id": 12055,
-          "key": "_vtp_cash_drawer_id",
-          "value": "2"
-        },
-        {
-          "id": 12050,
-          "key": "_vtp_change_amount",
-          "value": "0"
-        },
-        {
-          "id": 12053,
-          "key": "_vtp_counter_id",
-          "value": "1"
-        },
-        {
-          "id": 12044,
-          "key": "_vtp_discount_total",
-          "value": "-0"
         },
         {
           "id": 12043,
@@ -91,14 +572,39 @@
           "value": "-251"
         },
         {
+          "id": 12044,
+          "key": "_vtp_discount_total",
+          "value": "-0"
+        },
+        {
           "id": 12045,
           "key": "_vtp_order_note",
           "value": ""
         },
         {
-          "id": 12052,
-          "key": "_vtp_outlet_id",
-          "value": "1"
+          "id": 12046,
+          "key": "_vtp_payment_note",
+          "value": ""
+        },
+        {
+          "id": 12047,
+          "key": "_is_vitepos",
+          "value": "Y"
+        },
+        {
+          "id": 12048,
+          "key": "_vtp_payment_method",
+          "value": "C"
+        },
+        {
+          "id": 12049,
+          "key": "_vtp_tendered_amount",
+          "value": "700"
+        },
+        {
+          "id": 12050,
+          "key": "_vtp_change_amount",
+          "value": "0"
         },
         {
           "id": 12051,
@@ -123,14 +629,14 @@
           ]
         },
         {
-          "id": 12048,
-          "key": "_vtp_payment_method",
-          "value": "C"
+          "id": 12052,
+          "key": "_vtp_outlet_id",
+          "value": "1"
         },
         {
-          "id": 12046,
-          "key": "_vtp_payment_note",
-          "value": ""
+          "id": 12053,
+          "key": "_vtp_counter_id",
+          "value": "1"
         },
         {
           "id": 12054,
@@ -138,9 +644,9 @@
           "value": "1"
         },
         {
-          "id": 12049,
-          "key": "_vtp_tendered_amount",
-          "value": "700"
+          "id": 12055,
+          "key": "_vtp_cash_drawer_id",
+          "value": "2"
         }
       ],
       "line_items": [
@@ -319,29 +825,9 @@
       "number": "115141",
       "meta_data": [
         {
-          "id": 12026,
-          "key": "_cfw",
-          "value": "true"
-        },
-        {
-          "id": 12024,
-          "key": "_hs_cod_applied_rule_id",
-          "value": "rule_XwKUiHHG"
-        },
-        {
-          "id": 12022,
-          "key": "_hs_cod_deposit_amount",
-          "value": "50"
-        },
-        {
-          "id": 12025,
-          "key": "_hs_cod_deposit_paid",
-          "value": "yes"
-        },
-        {
-          "id": 12023,
-          "key": "_hs_cod_remaining_amount",
-          "value": "44"
+          "id": 12018,
+          "key": "is_vat_exempt",
+          "value": "no"
         },
         {
           "id": 12021,
@@ -349,34 +835,29 @@
           "value": "115141"
         },
         {
-          "id": 12035,
-          "key": "_wc_order_attribution_device_type",
-          "value": "Desktop"
+          "id": 12022,
+          "key": "_hs_cod_deposit_amount",
+          "value": "50"
         },
         {
-          "id": 12028,
-          "key": "_wc_order_attribution_referrer",
-          "value": "https://www.workstation.ma/cart/"
+          "id": 12023,
+          "key": "_hs_cod_remaining_amount",
+          "value": "44"
         },
         {
-          "id": 12033,
-          "key": "_wc_order_attribution_session_count",
-          "value": "1"
+          "id": 12024,
+          "key": "_hs_cod_applied_rule_id",
+          "value": "rule_XwKUiHHG"
         },
         {
-          "id": 12030,
-          "key": "_wc_order_attribution_session_entry",
-          "value": "https://www.workstation.ma/checkout/#cfw-order-review"
+          "id": 12025,
+          "key": "_hs_cod_deposit_paid",
+          "value": "yes"
         },
         {
-          "id": 12032,
-          "key": "_wc_order_attribution_session_pages",
-          "value": "7"
-        },
-        {
-          "id": 12031,
-          "key": "_wc_order_attribution_session_start_time",
-          "value": "2026-08-24 11:53:09"
+          "id": 12026,
+          "key": "_cfw",
+          "value": "true"
         },
         {
           "id": 12027,
@@ -384,9 +865,9 @@
           "value": "typein"
         },
         {
-          "id": 12034,
-          "key": "_wc_order_attribution_user_agent",
-          "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+          "id": 12028,
+          "key": "_wc_order_attribution_referrer",
+          "value": "https://www.workstation.ma/cart/"
         },
         {
           "id": 12029,
@@ -394,9 +875,34 @@
           "value": "(direct)"
         },
         {
-          "id": 12018,
-          "key": "is_vat_exempt",
-          "value": "no"
+          "id": 12030,
+          "key": "_wc_order_attribution_session_entry",
+          "value": "https://www.workstation.ma/checkout/#cfw-order-review"
+        },
+        {
+          "id": 12031,
+          "key": "_wc_order_attribution_session_start_time",
+          "value": "2026-08-24 11:53:09"
+        },
+        {
+          "id": 12032,
+          "key": "_wc_order_attribution_session_pages",
+          "value": "7"
+        },
+        {
+          "id": 12033,
+          "key": "_wc_order_attribution_session_count",
+          "value": "1"
+        },
+        {
+          "id": 12034,
+          "key": "_wc_order_attribution_user_agent",
+          "value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+        },
+        {
+          "id": 12035,
+          "key": "_wc_order_attribution_device_type",
+          "value": "Desktop"
         }
       ],
       "line_items": [
@@ -571,9 +1077,9 @@
       "number": "115140",
       "meta_data": [
         {
-          "id": 12013,
-          "key": "_cfw",
-          "value": "true"
+          "id": 12009,
+          "key": "is_vat_exempt",
+          "value": "no"
         },
         {
           "id": 12012,
@@ -581,9 +1087,9 @@
           "value": "115140"
         },
         {
-          "id": 12009,
-          "key": "is_vat_exempt",
-          "value": "no"
+          "id": 12013,
+          "key": "_cfw",
+          "value": "true"
         }
       ],
       "line_items": [
@@ -1665,12 +2171,12 @@
     {
       "id": 116435,
       "parent_id": 0,
-      "status": "processing",
+      "status": "completed",
       "currency": "MAD",
       "version": "11.0.1",
       "prices_include_tax": false,
       "date_created": "2026-08-21T17:11:58",
-      "date_modified": "2026-08-21T17:12:03",
+      "date_modified": "2026-08-25T11:02:23",
       "discount_total": "0",
       "discount_tax": "0",
       "shipping_total": "25",
@@ -1712,8 +2218,8 @@
       "customer_user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36",
       "created_via": "checkout",
       "customer_note": "",
-      "date_completed": null,
-      "date_paid": null,
+      "date_completed": "2026-08-25T11:02:23",
+      "date_paid": "2026-08-25T11:02:23",
       "cart_hash": "1647c5bd1e31ea8bcf9f4e4901893bd7",
       "number": "115135",
       "meta_data": [
@@ -1839,9 +2345,9 @@
       "needs_payment": false,
       "needs_processing": true,
       "date_created_gmt": "2026-08-21T17:11:58",
-      "date_modified_gmt": "2026-08-21T17:12:03",
-      "date_completed_gmt": null,
-      "date_paid_gmt": null,
+      "date_modified_gmt": "2026-08-25T11:02:23",
+      "date_completed_gmt": "2026-08-25T11:02:23",
+      "date_paid_gmt": "2026-08-25T11:02:23",
       "cost_of_goods_sold": {
         "total_value": 40
       },
@@ -3348,262 +3854,6 @@
           {
             "embeddable": true,
             "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116390/actions/email_templates"
-          }
-        ]
-      }
-    },
-    {
-      "id": 116389,
-      "parent_id": 0,
-      "status": "cancelled",
-      "currency": "MAD",
-      "version": "11.0.1",
-      "prices_include_tax": false,
-      "date_created": "2026-08-19T09:06:21",
-      "date_modified": "2026-08-19T09:08:01",
-      "discount_total": "0",
-      "discount_tax": "0",
-      "shipping_total": "0",
-      "shipping_tax": "0",
-      "cart_tax": "0",
-      "total": "1800",
-      "total_tax": "0",
-      "customer_id": 0,
-      "order_key": "wc_order_6rj3YV9WIf3pu",
-      "billing": {
-        "first_name": "Abdel Aziz",
-        "last_name": "",
-        "company": "",
-        "address_1": "",
-        "address_2": "",
-        "city": "CYM",
-        "state": "marab",
-        "postcode": "10150",
-        "country": "MA",
-        "email": "az.aittaleb@workstation.ma",
-        "phone": "00212808501756"
-      },
-      "shipping": {
-        "first_name": "",
-        "last_name": "",
-        "company": "",
-        "address_1": "",
-        "address_2": "",
-        "city": "",
-        "state": "",
-        "postcode": "",
-        "country": "",
-        "phone": ""
-      },
-      "payment_method": "",
-      "payment_method_title": "",
-      "transaction_id": "",
-      "customer_ip_address": "162.159.122.214",
-      "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
-      "created_via": "",
-      "customer_note": "",
-      "date_completed": "2026-08-19T09:06:22",
-      "date_paid": "2026-08-19T09:06:22",
-      "cart_hash": "",
-      "number": "115130",
-      "meta_data": [
-        {
-          "id": 11820,
-          "key": "_order_number",
-          "value": "115130"
-        },
-        {
-          "id": 11821,
-          "key": "_vtp_fee_total",
-          "value": "-310"
-        },
-        {
-          "id": 11822,
-          "key": "_vtp_discount_total",
-          "value": "-0"
-        },
-        {
-          "id": 11823,
-          "key": "_vtp_order_note",
-          "value": ""
-        },
-        {
-          "id": 11824,
-          "key": "_vtp_payment_note",
-          "value": ""
-        },
-        {
-          "id": 11825,
-          "key": "_is_vitepos",
-          "value": "Y"
-        },
-        {
-          "id": 11826,
-          "key": "_vtp_payment_method",
-          "value": "C"
-        },
-        {
-          "id": 11827,
-          "key": "_vtp_tendered_amount",
-          "value": "1800"
-        },
-        {
-          "id": 11828,
-          "key": "_vtp_change_amount",
-          "value": "0"
-        },
-        {
-          "id": 11829,
-          "key": "_vtp_payment_list",
-          "value": [
-            {
-              "type": "C",
-              "amount": 1800,
-              "payment_note": "",
-              "return_amount": "",
-              "flds": {
-                "payment_note": {
-                  "title": "Note",
-                  "name": "payment_note",
-                  "is_show": "N",
-                  "val": ""
-                }
-              },
-              "name": "Cash",
-              "is_paid": "Y"
-            }
-          ]
-        },
-        {
-          "id": 11830,
-          "key": "_vtp_outlet_id",
-          "value": "1"
-        },
-        {
-          "id": 11831,
-          "key": "_vtp_counter_id",
-          "value": "1"
-        },
-        {
-          "id": 11832,
-          "key": "_vtp_processed_by",
-          "value": "1"
-        },
-        {
-          "id": 11833,
-          "key": "_vtp_cash_drawer_id",
-          "value": "2"
-        }
-      ],
-      "line_items": [
-        {
-          "id": 1285,
-          "name": "MSI MPG A850GS PCIE5",
-          "cogs_value": null,
-          "product_id": 10405,
-          "variation_id": 0,
-          "quantity": 1,
-          "tax_class": "",
-          "subtotal": "1490",
-          "subtotal_tax": "0",
-          "total": "1490",
-          "total_tax": "0",
-          "taxes": [],
-          "meta_data": [
-            {
-              "id": 11895,
-              "key": "_vtp_regular_price",
-              "value": "1890",
-              "display_key": "_vtp_regular_price",
-              "display_value": "1890"
-            },
-            {
-              "id": 11896,
-              "key": "_vtp_items_price",
-              "value": "1490",
-              "display_key": "_vtp_items_price",
-              "display_value": "1490"
-            }
-          ],
-          "sku": "A850GS",
-          "global_unique_id": "4711377243780",
-          "price": 1490,
-          "image": {
-            "id": "10401",
-            "src": "https://www.workstation.ma/wp-content/uploads/2025/11/a850gs.jpg"
-          },
-          "parent_name": null,
-          "purchase_price": 880
-        }
-      ],
-      "tax_lines": [],
-      "shipping_lines": [],
-      "fee_lines": [
-        {
-          "id": 1286,
-          "name": "Frais",
-          "tax_class": "",
-          "tax_status": "none",
-          "amount": "310",
-          "total": "310",
-          "total_tax": "0",
-          "taxes": [],
-          "meta_data": [
-            {
-              "id": 11903,
-              "key": "_vtp_cal_type",
-              "value": "F",
-              "display_key": "_vtp_cal_type",
-              "display_value": "F"
-            },
-            {
-              "id": 11904,
-              "key": "_vtp_cal_val",
-              "value": "310",
-              "display_key": "_vtp_cal_val",
-              "display_value": "310"
-            }
-          ]
-        }
-      ],
-      "coupon_lines": [],
-      "refunds": [],
-      "payment_url": "https://www.workstation.ma/checkout/order-pay/116389/?pay_for_order=true&key=wc_order_6rj3YV9WIf3pu",
-      "is_editable": false,
-      "needs_payment": false,
-      "needs_processing": true,
-      "date_created_gmt": "2026-08-19T09:06:21",
-      "date_modified_gmt": "2026-08-19T09:08:01",
-      "date_completed_gmt": "2026-08-19T09:06:22",
-      "date_paid_gmt": "2026-08-19T09:06:22",
-      "cost_of_goods_sold": {
-        "total_value": 0
-      },
-      "currency_symbol": "MAD",
-      "_links": {
-        "self": [
-          {
-            "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116389",
-            "targetHints": {
-              "allow": [
-                "GET",
-                "POST",
-                "PUT",
-                "PATCH",
-                "DELETE"
-              ]
-            }
-          }
-        ],
-        "collection": [
-          {
-            "href": "https://www.workstation.ma/wp-json/wc/v3/orders"
-          }
-        ],
-        "email_templates": [
-          {
-            "embeddable": true,
-            "href": "https://www.workstation.ma/wp-json/wc/v3/orders/116389/actions/email_templates"
           }
         ]
       }
@@ -105392,9 +105642,9 @@
       "number": "114653",
       "meta_data": [
         {
-          "id": 141,
-          "key": "is_vat_exempt",
-          "value": "no"
+          "id": 145,
+          "key": "_cfw",
+          "value": "true"
         },
         {
           "id": 144,
@@ -105402,34 +105652,9 @@
           "value": "114653"
         },
         {
-          "id": 145,
-          "key": "_cfw",
-          "value": "true"
-        },
-        {
-          "id": 146,
-          "key": "_wc_order_attribution_source_type",
-          "value": "typein"
-        },
-        {
-          "id": 147,
-          "key": "_wc_order_attribution_utm_source",
-          "value": "(direct)"
-        },
-        {
-          "id": 148,
-          "key": "_wc_order_attribution_session_entry",
-          "value": "https://www.workstation.ma/produit/xfx-amd-radeon-rx-580-gts-xxx-edition-8gb/?srsltid=AfmBOoqsl6fVIyfruT_VYRo77M-UAI4fgfceCwbFbWNdcvVVadorYF6K"
-        },
-        {
-          "id": 149,
-          "key": "_wc_order_attribution_session_start_time",
-          "value": "2026-01-02 18:45:19"
-        },
-        {
-          "id": 150,
-          "key": "_wc_order_attribution_session_pages",
-          "value": "16"
+          "id": 153,
+          "key": "_wc_order_attribution_device_type",
+          "value": "Desktop"
         },
         {
           "id": 151,
@@ -105437,14 +105662,39 @@
           "value": "1"
         },
         {
+          "id": 148,
+          "key": "_wc_order_attribution_session_entry",
+          "value": "https://www.workstation.ma/produit/xfx-amd-radeon-rx-580-gts-xxx-edition-8gb/?srsltid=AfmBOoqsl6fVIyfruT_VYRo77M-UAI4fgfceCwbFbWNdcvVVadorYF6K"
+        },
+        {
+          "id": 150,
+          "key": "_wc_order_attribution_session_pages",
+          "value": "16"
+        },
+        {
+          "id": 149,
+          "key": "_wc_order_attribution_session_start_time",
+          "value": "2026-01-02 18:45:19"
+        },
+        {
+          "id": 146,
+          "key": "_wc_order_attribution_source_type",
+          "value": "typein"
+        },
+        {
           "id": 152,
           "key": "_wc_order_attribution_user_agent",
           "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
         },
         {
-          "id": 153,
-          "key": "_wc_order_attribution_device_type",
-          "value": "Desktop"
+          "id": 147,
+          "key": "_wc_order_attribution_utm_source",
+          "value": "(direct)"
+        },
+        {
+          "id": 141,
+          "key": "is_vat_exempt",
+          "value": "no"
         }
       ],
       "line_items": [
@@ -106769,7 +107019,7 @@
       }
     }
   ],
-  "lastFetchTime": 1787670187867,
+  "lastFetchTime": 1787821170827,
   "productPrices": {
     "1849": 2200,
     "1850": 2200,
@@ -107018,6 +107268,7 @@
     "115278": 127,
     "115288": 20,
     "115321": 1000,
+    "115329": 210,
     "115334": 232,
     "115352": 314,
     "115353": 314,
