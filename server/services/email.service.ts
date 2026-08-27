@@ -77,8 +77,9 @@ export class EmailService {
       });
     }
 
-    await transporter.sendMail({
-      from: `"Cockpit d'Exploitation" <${senderEmail.trim()}>`,
+    const cleanPass = senderPassword.replace(/\s+/g, '');
+    const mailPayload = {
+      from: `"Cockpit d'Exploitation" <${senderEmail}>`,
       to: to.trim(),
       subject: subject || 'Document de Facturation',
       html:
@@ -92,8 +93,32 @@ export class EmailService {
         </div>
       `,
       attachments,
-    });
+    };
 
-    logger.info(`Email envoyé avec succès à: ${to.trim().slice(0, 3)}***@***`);
+    try {
+      await transporter.sendMail(mailPayload);
+      logger.info(`Email envoyé avec succès à: ${to.trim().slice(0, 3)}***@***`);
+    } catch (primaryErr: any) {
+      logger.warn(`Échec envoi initial (${primaryErr.message}), tentative via SMTP Gmail Port 587 TLS...`);
+      const fallbackTransporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        connectionTimeout: timeout,
+        greetingTimeout: timeout,
+        socketTimeout: timeout,
+        auth: {
+          user: senderEmail,
+          pass: cleanPass,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+
+      await fallbackTransporter.sendMail(mailPayload);
+      logger.info(`Email envoyé avec succès via fallback TLS à: ${to.trim().slice(0, 3)}***@***`);
+    }
   }
 }
